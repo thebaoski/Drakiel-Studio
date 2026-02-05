@@ -591,8 +591,16 @@ dropZone.addEventListener('drop', (e) => {
 
     cancelConfirm.addEventListener('click', () => modal.classList.remove('active'));
     
-    acceptConfirm.addEventListener('click', () => {
+        acceptConfirm.addEventListener('click', () => {
         modal.classList.remove('active');
+
+        // To pole musi mieć pełny adres URL Twojej strony
+        // Jeśli Twoja strona to np. drakielstudio.pl, wpisz to tutaj:
+        const nextInput = form.querySelector('input[name="_next"]');
+        
+        // Automatyczne wykrywanie adresu (zadziała po wrzuceniu na hosting)
+        nextInput.value = window.location.origin + "/thanks.html"; 
+
         form.submit(); 
     });
 
