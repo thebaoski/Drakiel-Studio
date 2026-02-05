@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zamów sesję</title>
+  <link rel="stylesheet" href="drakiel_studio.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="drakiel_logo.png"/>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pl.js"></script>
+  <style>
+    :root {
+      --main-red: #ca0c2c;
+      --dark-bg: #1a1a1a;
+      --gray-bg: #2a2a2a;
+      --text-white: #ffffff;
+      --gray-faded: #808080;
+      --shadow: 0 0 25px rgba(0,0,0,.6);
+    }
+
+    body {
+      margin: 0;
+      background: var(--dark-bg);
+      color: var(--text-white);
+      font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    /* Header z Twojej strony (prosty, kompatybilny z istniejącym) */
+   
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 20px 50px;
+      background: rgba(0, 0, 0, 0.329);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo-title img {
+      height: 60px;
+    }
+
+    .logo-title h1 {
+      font-size: 2.5rem;
+      font-family: Stretch Pro;
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #ca0c2c;
+    }
+
+    /* Layout */
+    .page {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 380px;
+      gap: 36px;
+      max-width: 1200px;
+      margin: 150px auto 80px;
+      padding: 0 24px;
+    }
+
+    .form-card {
+      background: var(--dark-bg);
+      border: 0px solid #2b2b2b;
+      border-radius: 14px;
+      padding: 28px;
+      /* box-shadow: var(--shadow); */
+    }
+    .form-card h2 { margin: 0 0 12px; font-size: 26px; }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px 24px;
+      margin-top: px;
+    }
+    label { font-size: 14px; color: #ccc; display:block; margin-bottom:10px; }
+    input[type="text"], input[type="email"], select, textarea {
+      width: 100%;
+      background: var(--gray-bg);
+      color: var(--text-white);
+      border: 1px solid #383838;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 15px;
+      outline: none;
+    }
+    textarea { resize: vertical; min-height: 96px; }
+    input:focus, select:focus, textarea:focus { border-color: var(--main-red); box-shadow: 0 0 0 3px rgba(202,12,44,.15); }
+
+    .hint { font-size: 12px; color: #bdbdbd; font-style: italic; margin-top: 4px; }
+
+    /* Godziny */
+    .hours {
+      margin-top: 35px;
+    }
+    .hours-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0,1fr));
+      gap: 10px;
+    }
+    .hour-btn {
+      background: #303030;
+      color: #fff;
+      border: 1px solid #3a3a3a;
+      border-radius: 10px;
+      padding: 10px 0;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform .15s ease, background .2s ease, border-color .2s ease;
+      user-select: none;
+    }
+    .hour-btn:hover:not(.disabled) { background: #383838; }
+    .hour-btn.selected { background: var(--main-red); border-color: #ff2d52; }
+    .hour-btn.disabled { background: #222; color: #777; border-color: #2a2a2a; cursor: not-allowed; position: relative; }
+    .hour-btn.disabled::after {
+      content: "zajęte";
+      position: absolute; inset: 4px 6px auto auto; font-size: 10px; color: #aaa;
+    }
+
+    /* Podsumowanie */
+    .summary {
+      position: sticky; top: 96px; align-self: start;
+      background: var(--dark-bg);
+      border: 0px solid #2b2b2b; border-radius: 16px; padding: 22px; box-shadow: var(--shadow);
+    }
+    .summary h3 { margin: 0 0 10px; text-align: center; color: var(--main-red); font-size: 24px; letter-spacing: .4px; }
+    .summary .line { display:flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px dashed #2f2f2f; }
+    .summary .line:last-child { border-bottom: none; }
+    #s-pakiet { color: var(--main-red); font-weight: 700; }
+    #s-cena { color: var(--main-red); font-weight: 800; font-size: 22px; }
+
+    .submit-row { display:flex; gap: 12px; margin-top: 18px; }
+    .btn {
+      background: var(--main-red); color: #fff; border: none; border-radius: 10px; padding: 12px 16px; font-weight: 700; cursor: pointer; width: 100%;
+      transition: filter .2s ease;
+    }
+    .btn:hover { filter: brightness(1.08); }
+
+    /* Flatpickr – ciemny styl + blokady */
+    .flatpickr-calendar { background-color: var(--gray-bg); box-shadow: 0 0 25px rgba(0,0,0,0.6); border-radius: 10px; color: white; font-size: 17px; width: 420px; max-height: 440px; overflow-y: auto; padding-bottom: 10px; }
+    .flatpickr-day { background: var(--gray-bg); border-radius: 6px; color: white; position: relative; }
+    .flatpickr-day.today { background: #444; }
+    .flatpickr-day:hover { background: var(--main-red); color:white; }
+    .flatpickr-day.prevMonthDay, .flatpickr-day.nextMonthDay, .flatpickr-day.disabled, .flatpickr-day.flatpickr-disabled { opacity:.45; color: var(--gray-faded); background:#2a2a2a; cursor:not-allowed; }
+    .flatpickr-weekday { color:white; margin-bottom:4px; }
+    .weekend-price { position:absolute; top:-12px; right:2px; font-size:10px; color:#ca0c2c; }
+
+    /* Tooltip dla niedostępnych dni */
+    .fp-tooltip { position: absolute; background: #111; color:#fff; border:1px solid #333; padding:6px 8px; border-radius:8px; font-size:12px; white-space:nowrap; transform: translate(-50%, -120%); pointer-events:none; }
+
+    /* Modal potwierdzenia */
+    .modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,.6); z-index: 100; }
+    .modal.active { display: flex; }
+    .modal-card { width: min(560px, 92vw); background: #1f1f1f; border:1px solid #2e2e2e; border-radius: 14px; box-shadow: var(--shadow); padding: 18px; }
+    .modal-card h4 { margin: 0 0 8px; font-size: 20px; }
+    .confirm-lines { font-size: 14px; color:#ddd; border:1px solid #2a2a2a; border-radius: 10px; padding: 12px; background:#181818; }
+    .confirm-actions { display:flex; gap: 10px; margin-top: 14px; }
+    .btn-ghost { background: #2f2f2f; color:#eee; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo-title">
+      <img src="drakiel_logo.png" alt="Drakiel Logo" />
+      <h1>DDrakiel</h1>
+    </div>
+    <nav>
+      <a href="index.html">Studio</a>
+      <a href="mix.html">Mix&Mastering</a>
+      <a href="sesja.html">Sesja</a>
+      <a href="bup.html">Portfolio</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="form-card">
+      <h2>Zamów sesję</h2>
+      <form id="form-rez" action="https://formsubmit.co/wytworniadrakiel.kontakt@gmail.com" method="POST" novalidate>
+        <input type="hidden" name="_subject" value="Zamówienie sesji muzycznej" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" value="thanks.html" />
+
+        <div class="form-grid">
+          <div>
+            <label for="name">Imię i nazwisko</label>
+            <input type="text" id="name" name="Imię i nazwisko" required />
+          </div>
+          <div>
+            <label for="email">Adres e‑mail</label>
+            <input type="email" id="email" name="Email" required />
+            <div class="hint">Potrzebujemy Twojego e‑maila do kontaktu.</div>
+          </div>
+        </div>
+
+        <div class="form-grid" style="margin-top:12px;">
+          <div>
+            <label for="typ">Typ sesji</label>
+            <select id="typ" name="Typ sesji" required>
+              <option value="Sesja Start / Demo">Sesja Start / Demo (35zł/h)</option>
+              <option value="Sesja Standard">Sesja Standard (45zł/h)</option>
+              <option value="Sesja Premium">Sesja Premium (60zł/h)</option>
+            </select>
+          </div>
+          <div>
+            <label for="feat">Czy ma pojawić się gościnka (feat)?</label>
+            <select id="feat" name="Gościnka">
+              <option value="Nie">Nie</option>
+              <option value="Tak">Tak</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid" style="margin-top:12px;">
+          <div>
+            <label for="data">Wybierz datę sesji</label>
+            <input type="text" id="data" name="Data" placeholder="Wybierz datę" required />
+          </div>
+        </div>
+
+        <!-- WYBÓR GODZIN -->
+        <div class="hours">
+          <label>Wybierz godziny (11:00 – 22:00)</label>
+          <div class="hours-grid" id="hours-grid"></div>
+          <input type="hidden" id="wybrane-godziny" name="Wybrane godziny" required />
+        </div>
+
+        <label for="uwagi" style="margin-top:14px;">Dodatkowe uwagi (opcjonalne)</label>
+        <textarea id="uwagi" name="Uwagi" rows="4" placeholder="Jeśli masz dodatkowe informacje lub potrzeby, wpisz je tutaj..."></textarea>
+
+        <div class="submit-row">
+          <button type="button" id="preview" class="btn btn-ghost">Podgląd podsumowania</button>
+          <button type="submit" class="btn">Wyślij zamówienie</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Podsumowanie -->
+    <aside class="summary">
+      <h3>Podsumowanie</h3>
+      <div class="line"><span>Pakiet</span><strong id="s-pakiet">–</strong></div>
+      <div class="line"><span>Data</span><span id="s-data">–</span></div>
+      <div class="line"><span>Godziny</span><span id="s-godziny">–</span></div>
+      <div class="line"><span>Gościnka</span><span id="s-feat">–</span></div>
+      <div class="line"><span>Cena</span><span id="s-cena">0 zł</span></div>
+    </aside>
+  </main>
+
+  <!-- Modal potwierdzenia wysyłki -->
+  <div class="modal" id="confirm-modal">
+    <div class="modal-card">
+      <h4>Potwierdź ustawienia</h4>
+      <div class="confirm-lines" id="confirm-text"></div>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" id="cancel-confirm" type="button">Anuluj</button>
+        <button class="btn" id="accept-confirm" type="button">Wyślij</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="konfiguracja.js"></script>
+  <script>
+    // ====== KONFIGURACJA ======
+    const CENY = { 'Sesja Start / Demo': 35, 'Sesja Standard': 45, 'Sesja Premium': 60 };
+    const hours = ["11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"];
+    const lateHours = new Set(["20:00","21:00","22:00"]); // +20 zł/h
+
+    // ====== ELEMENTY ======
+    const form = document.getElementById('form-rez');
+    const dataInput = document.getElementById('data');
+    const typSelect = document.getElementById('typ');
+    const featSelect = document.getElementById('feat');
+    const hoursGrid = document.getElementById('hours-grid');
+    const hiddenHours = document.getElementById('wybrane-godziny');
+
+    const sPakiet = document.getElementById('s-pakiet');
+    const sData = document.getElementById('s-data');
+    const sGodziny = document.getElementById('s-godziny');
+    const sFeat = document.getElementById('s-feat');
+    const sCena = document.getElementById('s-cena');
+
+    const previewBtn = document.getElementById('preview');
+    const modal = document.getElementById('confirm-modal');
+    const confirmText = document.getElementById('confirm-text');
+    const cancelConfirm = document.getElementById('cancel-confirm');
+    const acceptConfirm = document.getElementById('accept-confirm');
+
+    // Stan godzin (12:00–22:00)
+    const GODZINY = Array.from({length: 12}, (_,i)=> `${11+i}:00`);
+    let zakres = null; // {start: idx, end: idx}
+
+    // ====== KALENDARZ ======
+    const fp = flatpickr(dataInput, {
+      locale: 'pl',
+      disableMobile: true,
+      minDate: 'today',
+      dateFormat: 'd.m.Y',
+      clickOpens: true,
+      allowInput: false,
+      monthSelectorType: 'dropdown',
+      disable: [
+        function(date) {
+          const y = date.getFullYear();
+          const m = String(date.getMonth()+1).padStart(2,'0');
+          const d = String(date.getDate()).padStart(2,'0');
+          const key = `${y}-${m}-${d}`;
+          return ZABLOKOWANE_DATY.includes(key);
+        }
+      ],
+      onDayCreate: function(dObj, dStr, fp, dayElem) {
+        // Oznaczenie weekendu + tooltip dla zablokowanych dni
+        const date = dayElem.dateObj;
+        const day = date.getDay(); // 0 nd, 6 sb
+        if (day === 0 || day === 6) {
+          const tag = document.createElement('span');
+          tag.textContent = '+10zł';
+          tag.style.fontSize = '10px';
+          tag.style.color = '#ca0c2c';
+          tag.style.position = 'absolute';
+          tag.style.top = '-10px';
+          tag.style.right = '4px';
+          dayElem.appendChild(tag);
+        }
+        if (dayElem.classList.contains('flatpickr-disabled')) {
+          dayElem.title = 'Ten dzień jest już zarezerwowany lub niedostępny';
+        }
+      },
+      onChange: () => {
+        zakres = null; // reset wyboru godzin przy zmianie daty
+        renderHours();
+        updateSummary();
+      },
+      onReady: function(selectedDates, dateStr, instance){
+        // Scroll między miesiącami jak w Win11
+        instance.calendarContainer.addEventListener('wheel', function(e){
+          e.preventDefault();
+          if (e.deltaY < 0) instance.prevMonth();
+          else instance.nextMonth();
+        }, { passive:false });
+      }
+    });
+
+    // ====== GODZINY – render i logika zakresu ======
+    function renderHours(){
+  hoursGrid.innerHTML = '';
+  const dateStr = dataInput.value;
+  const disabledForDay = (dateStr && ZABLOKOWANE_GODZINY[dateStr]) ? ZABLOKOWANE_GODZINY[dateStr] : [];
+
+  GODZINY.forEach((g, idx) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = g;
+    btn.className = 'hour-btn';
+    btn.dataset.idx = idx;
+    btn.style.position = "relative"; // Potrzebne do pozycjonowania napisu +20zł
+
+    // Dodanie napisu +20zł dla godzin 20:00, 21:00, 22:00
+    if (lateHours.has(g)) {
+      const priceTag = document.createElement('span');
+      priceTag.textContent = '+20zł';
+      priceTag.style.cssText = "position:absolute; top:0px; right:2px; font-size:10px; color:#ca0c2c; pointer-events:none;";
+      btn.appendChild(priceTag);
+    }
+
+    if (disabledForDay.includes(g)) {
+      btn.classList.add('disabled');
+      btn.title = 'Ten slot jest zajęty';
+    }
+
+    btn.addEventListener('click', () => handleHourClick(idx, disabledForDay));
+    hoursGrid.appendChild(btn);
+  });
+
+  applySelectionClasses();
+  validateHours();
+}
+
+   function handleHourClick(idx, disabledForDay) {
+  const btn = hoursGrid.querySelector(`.hour-btn[data-idx="${idx}"]`);
+  if (!btn || btn.classList.contains('disabled')) return;
+
+  // 🔹 Jeśli kliknięto w już zaznaczony zakres → usuń cały wybór
+  if (zakres && idx >= zakres.start && idx <= zakres.end) {
+    zakres = null;
+    odswiezGodziny();
+    aktualizujPodsumowanie();
+    return; // <--- bardzo ważne, kończy funkcję tutaj!
+  }
+
+  // 🔹 Normalna logika wybierania zakresu
+  if (!zakres) {
+    zakres = { start: idx, end: idx };
+  } else {
+    const start = Math.min(zakres.start, idx);
+    const end = Math.max(zakres.end, idx);
+
+    // Sprawdź, czy nie ma zablokowanych godzin w środku
+    const maPrzerwy = GODZINY.slice(start, end + 1).some(h => disabledForDay.includes(h));
+    if (maPrzerwy) {
+      alert('Nie można zaznaczyć zakresu przez zajęty slot. Wybierz inny przedział.');
+      return;
+    }
+    zakres = { start, end };
+  }
+
+
+      applySelectionClasses();
+      writeHiddenHours();
+      updateSummary();
+    }
+
+    function applySelectionClasses(){
+      const buttons = hoursGrid.querySelectorAll('.hour-btn');
+      buttons.forEach(b => b.classList.remove('selected'));
+      if (!zakres) return;
+      buttons.forEach(b => {
+        const i = +b.dataset.idx;
+        if (i >= zakres.start && i <= zakres.end && !b.classList.contains('disabled')) {
+          b.classList.add('selected');
+        }
+      });
+    }
+
+    function writeHiddenHours(){
+      if (!zakres) { hiddenHours.value = ''; return; }
+      const wybrane = GODZINY.slice(zakres.start, zakres.end+1);
+      hiddenHours.value = wybrane.join(', ');
+    }
+
+    // ====== PODSUMOWANIE + CENA ======
+    function isWeekend(dateStr) {
+      if (!dateStr || dateStr === "" || dateStr === "–") return false;
+      
+      // Konwersja z DD.MM.YYYY na YYYY-MM-DD, aby JS to zrozumiał
+      const parts = dateStr.split('.');
+      if (parts.length !== 3) return false;
+      
+      const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+      const d = new Date(formattedDate);
+      
+      if (isNaN(d.getTime())) return false; 
+      
+      const day = d.getDay();
+      // 0 to niedziela, 6 to sobota
+      return (day === 0 || day === 6);
+    }
+   function obliczCene() {
+      const pakiet = typSelect.value;
+      const feat = featSelect.value;
+      const stawka = CENY[pakiet] || 0;
+      const wybraneGodziny = hiddenHours.value ? hiddenHours.value.split(', ') : [];
+      const dataWybrana = dataInput.value;
+      
+      // 1. Cena podstawowa (stawka * liczba godzin)
+      let cena = stawka * wybraneGodziny.length;
+      
+      // 2. Dodatek za godziny nocne (+20zł za każdą godzinę 20:00+)
+      wybraneGodziny.forEach(g => {
+        if (lateHours.has(g.trim())) {
+          cena += 20;
+        }
+      });
+
+      // 3. Dodatek za weekend (+10zł za KAŻDĄ godzinę)
+      if (isWeekend(dataWybrana)) {
+        cena += 10;
+      }
+
+      // 4. Mnożnik za feat (na samym końcu od całości)
+      if (feat === 'Tak') {
+        cena *= 1.8;
+      }
+      
+      return Math.round(cena);
+    }
+
+    function updateSummary(){
+      sPakiet.textContent = typSelect.value || '–';
+      sData.textContent = dataInput.value || '–';
+      sFeat.textContent = featSelect.value || '–';
+      const godz = hiddenHours.value || '';
+      if (godz) {
+        const list = godz.split(', ');
+        const zakresTxt = list.length ? `${list[0]} – ${list[list.length-1]}` : '–';
+        sGodziny.textContent = `${zakresTxt} (${list.length}h)`;
+      } else {
+        sGodziny.textContent = '–';
+      }
+      sCena.textContent = obliczCene() + ' zł';
+    }
+
+    typSelect.addEventListener('change', updateSummary);
+    featSelect.addEventListener('change', updateSummary);
+
+    function validateHours(){
+      if (!hiddenHours.value) {
+        hiddenHours.setCustomValidity('Wybierz godzinę lub zakres godzin.');
+      } else {
+        hiddenHours.setCustomValidity('');
+      }
+    }
+
+    // Autowybór pakietu z query stringu
+    (function syncPakietFromQuery(){
+      const qs = new URLSearchParams(location.search);
+      const p = qs.get('pakiet');
+      if (p && CENY[p] !== undefined) {
+        typSelect.value = p;
+      }
+      updateSummary();
+    })();
+
+    // Inicjalizacja
+    renderHours();
+    updateSummary();
+
+    // Podgląd – pokaż modal z podsumowaniem
+    previewBtn.addEventListener('click', () => {
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      confirmText.innerHTML = `
+        <div><strong>Pakiet:</strong> ${sPakiet.textContent}</div>
+        <div><strong>Data:</strong> ${sData.textContent}</div>
+        <div><strong>Godziny:</strong> ${sGodziny.textContent}</div>
+        <div><strong>Gościnka:</strong> ${sFeat.textContent}</div>
+        <div><strong>Cena:</strong> ${sCena.textContent}</div>
+      `;
+      modal.classList.add('active');
+    });
+
+    cancelConfirm.addEventListener('click', ()=> modal.classList.remove('active'));
+
+    acceptConfirm.addEventListener('click', () => {
+      modal.classList.remove('active');
+      form.submit();
+    });
+
+    // Blokuj wysyłkę bez poprawnych danych; pokaż modal jako podwójne potwierdzenie
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      writeHiddenHours();
+      validateHours();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      // Ustaw poprawny _next (na wypadek środowisk lokalnych)
+      const next = form.querySelector('input[name="_next"]');
+      next.value = location.origin + (location.pathname.endsWith('/') ? '' : '/') + 'thanks.html';
+
+      // Pokaż modal drugi raz, jeśli użytkownik kliknął bez podglądu
+      confirmText.innerHTML = `
+        <div><strong>Pakiet:</strong> ${typSelect.value}</div>
+        <div><strong>Data:</strong> ${dataInput.value || '–'}</div>
+        <div><strong>Godziny:</strong> ${sGodziny.textContent}</div>
+        <div><strong>Gościnka:</strong> ${featSelect.value}</div>
+        <div><strong>Cena:</strong> ${obliczCene()} zł</div>`;
+      modal.classList.add('active');
+    });
+  </script>
+</body>
+</html>

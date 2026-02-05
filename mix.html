@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zamów Mix/Mastering - Drakiel Studio</title>
+  <link rel="stylesheet" href="drakiel_studio.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="drakiel_logo.png"/>
+  <style>
+    /* Style specyficzne dla tego formularza */
+    :root {
+      --main-red: #ca0c2c;
+      --dark-bg: #1a1a1a;
+      --gray-bg: #2a2a2a;
+      --text-white: #ffffff;
+      --shadow: 0 0 25px rgba(0,0,0,.6);
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 20px 50px;
+      background: rgba(0, 0, 0, 0.329);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--dark-bg);
+      color: var(--text-white);
+      font-family: Inter, system-ui, sans-serif;
+      /* font-family: Century Gothic; */
+    }
+
+    .page {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 380px;
+      gap: 36px;
+      max-width: 1200px;
+      margin: 150px auto 80px;
+      padding: 0 24px;
+    }
+
+    .form-card {
+      background: var(--dark-bg);
+      border-radius: 14px;
+      padding: 28px;
+    }
+    .form-card h2 { margin: 0 0 20px; font-size: 28px; font-family: 'Montserrat', sans-serif; }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px 24px;
+      margin-bottom: 20px;
+    }
+
+    label { font-size: 14px; color: #ccc; display:block; margin-bottom:10px;}
+    
+    input[type="text"], input[type="email"], select, textarea {
+      width: 100%;
+      background: var(--gray-bg);
+      color: var(--text-white);
+      border: 1px solid #383838;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 15px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    /* Kolor placeholdera w selectach (gdy nic nie wybrano) */
+    select:invalid { color: #808080; }
+    select option { color: #ffffff; }
+
+    select option {
+        font-size: 16px;      
+        background: #2a2a2a;  
+        color: white;
+        margin-top: 20px;
+        padding: 25px;       
+    }
+
+    /* Powiększenie samego klikalnego okienka i dodanie efektu Drakiel */
+    select {
+        cursor: pointer;
+        appearance: none;     /* Usuwa standardową strzałkę systemową */
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 20px center;
+        background-size: 18px;
+        padding-right: 50px !important; /* Miejsce na naszą nową strzałkę */
+    }
+
+    /* EFEKT GLOW: Czerwona poświata po kliknięciu */
+        select:focus, input:focus, textarea:focus {
+        border-color: var(--main-red);
+        box-shadow: 0 0 15px rgba(202, 12, 44, 0.4); /* Czerwony blask */
+        background-color: #333; /* Delikatne rozjaśnienie tła przy edycji */
+    }
+
+    select:disabled {
+      background: #1f1f1f;
+      color: #666;
+      border-color: #2a2a2a;
+      cursor: not-allowed;
+      font-style: italic;
+    }
+
+    textarea { resize: vertical; min-height: 96px; }
+    input:focus, select:focus, textarea:focus { border-color: var(--main-red); box-shadow: 0 0 0 3px rgba(202,12,44,.15); }
+
+    .hint { font-size: 12px; color: #bdbdbd; font-style: italic; margin-top: 4px; }
+
+    p  {
+        font-family: Inter;
+        margin-top: -12px;
+        color:#686767 ;
+    }
+
+    /* Podsumowanie */
+    .summary {
+      position: sticky; top: 110px; align-self: start;
+      background: var(--dark-bg);
+      border-radius: 16px; padding: 22px; box-shadow: var(--shadow);
+    }
+    .summary h3 { margin: 0 0 15px; text-align: center; color: var(--main-red); font-size: 24px; letter-spacing: .4px; font-family: 'Montserrat', sans-serif;}
+    .summary .line { display:flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px dashed #2f2f2f; font-size: 14px; }
+    .summary .line:last-child { border-bottom: none; }
+    .summary .line strong { text-align: right; color: #eee; }
+    
+    #s-cena { color: var(--main-red); font-weight: 800; font-size: 24px; }
+
+    .submit-row { display:flex; gap: 12px; margin-top: 25px; }
+    .btn {
+      background: var(--main-red); color: #fff; border: none; border-radius: 10px; padding: 14px 16px; font-weight: 700; cursor: pointer; width: 100%;
+      transition: filter .2s ease;
+      font-size: 16px;
+    }
+    .btn:hover { filter: brightness(1.1); }
+
+    @media (max-width: 850px) {
+      .page { grid-template-columns: 1fr; }
+      .summary { position: static; margin-top: 20px; }
+    }
+
+    /* STYL MODALA */
+        .modal {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.85);
+        display: flex; align-items: center; justify-content: center;
+        z-index: 9999; opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+        .modal.active { opacity: 1; pointer-events: all; }
+
+        .modal-content {
+        background: #1a1a1a; padding: 40px; border-radius: 20px;
+        max-width: 600px; width: 90%; border: 0px solid var(--main-red);
+        box-shadow: 0 0 30px rgba(202, 12, 44, 0.3);
+        }
+
+        .modal-content h2 { color: var(--main-red); margin-top: 0; font-family: 'Montserrat', sans-serif; }
+
+        #confirmText div {
+        padding: 12px 0; border-bottom: 1px solid #333;
+        display: flex; justify-content: space-between; font-size: 18px;
+        }
+
+        #confirmText strong { color: var(--main-red); }
+
+        .btn-ghost { background: #333 !important; color: #ccc !important; }
+
+        /* Kontener dla przycisków Tak/Nie */
+            .toggle-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+            }
+
+            .toggle-btn {
+            flex: 1;
+            background: var(--gray-bg);
+            border: 1px solid #383838;
+            color: #fff;
+            padding: 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            }
+
+            .toggle-btn:hover {
+            border-color: var(--main-red);
+            }
+
+            .toggle-btn.active {
+                background: var(--main-red) !important;
+                border-color: var(--main-red) !important;
+                box-shadow: 0 0 15px rgba(202, 12, 44, 0.4);
+                color: #fff;
+                }
+
+                /* Domyślny kolor znacznika ceny (czerwony) */
+            .price-tag {
+            color: var(--main-red);
+            transition: color 0.3s ease; /* Płynna zmiana koloru */
+            }
+
+            /* Kolor znacznika, GDY przycisk jest aktywny (czarny) */
+            .toggle-btn.active .price-tag {
+            color: #000000 !important; /* Zmieniamy na czarny, żeby kontrastował z czerwonym tłem */
+            }
+
+            .custom-upload {
+                width: 100%;
+                min-height: 96px; /* Taka sama wysokość jak textarea */
+                background: var(--gray-bg);
+                border: 1px solid #383838;
+                border-radius: 10px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: 0.3s;
+                text-align: center;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+
+            .custom-upload:hover {
+                border-color: var(--main-red);
+                background-color: #333;
+            }
+
+            .custom-upload img {
+                max-width: 40px; /* Rozmiar Twojej grafiki */
+                margin-bottom: 10px;
+                opacity: 0.7;
+            }
+
+            .custom-upload span {
+                font-family: Century Gothic;
+                font-size: 14px;
+                color: #ccc;
+            }
+
+            /* Styl po wybraniu pliku */
+            .custom-upload.file-selected {
+                border-color: #28a745; /* Zielony kolor po sukcesie */
+            }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo-title">
+      <img src="drakiel_logo.png" alt="Drakiel Logo" />
+      <h1>DDrakiel</h1>
+    </div>
+    <nav>
+      <a href="index.html">Studio</a>
+      <a href="mix.html"> Mix&Mastering</a>
+      <a href="sesja.html">Sesja</a>
+      <a href="bup.html">Portfolio</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="form-card">
+      <h2>Konfiguracja Mix / Mastering</h2>
+      <p>czas realizacji do 14 dni</p>
+      <br>
+      <form id="form-mix" action="https://formsubmit.co/wytworniadrakiel.kontakt@gmail.com" method="POST" enctype="multipart/form-data">
+        <input type="hidden" id="hidden-price" name="Cena całkowita" value="150 zł">
+        <input type="hidden" name="total_price" id="total_price">
+        <input type="hidden" id="email-subject" name="_subject" value="Nowe zamówienie: MIX/MASTER" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" value="thanks.html" />
+
+        <div class="form-grid">
+          <div>
+            <label for="name">Imię i nazwisko / Ksywa</label>
+            <input type="text" id="name" name="Klient" required placeholder="Np. Jan Kowalski" />
+          </div>
+          <div>
+            <label for="email">Adres e-mail</label>
+            <input type="email" id="email" name="Email" required placeholder="twoj@email.com" />
+          </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #2a2a2a; margin: 20px 0;">
+
+        <div class="form-grid">
+          <div>
+            <label for="songName">Nazwa utworu</label>
+            <input type="text" id="songName" name="Nazwa utworu" required placeholder="Wpisz tytuł..." />
+          </div>
+          <div>
+            <label for="realizator">Wybór Realizatora</label>
+            <select id="realizator" name="Realizator" required>
+              <option value="" disabled selected hidden>Wybierz realizatora...</option>
+              <option value="Baoski">Baoski</option>
+              <option value="urwisekk">urwisekk</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div>
+            <label for="source">Gdzie nagrano utwór?</label>
+            <select id="source" name="Miejsce nagrania" required>
+              <option value="" disabled selected hidden>Wybierz miejsce...</option>
+              <option value="Drakiel Studio">Studio Drakiel</option>
+              <option value="Inne">Poza studiem / W domu</option>
+            </select>
+          </div>
+          <div>
+            <label for="quality">Jakość nagrania śladów</label>
+            <select id="quality" name="Jakość nagrania" required>
+                <option value="" disabled selected hidden data-price="0">Wybierz jakość...</option>
+                <option value="Studyjna" data-price="0">Studyjna (Profesjonalna)</option>
+                <option value="Domowa (z adaptacją)" data-price="30">Domowa z adaptacją akustyczną (+30zł)</option>
+                <option value="Domowa" data-price="50">Domowa bez adaptacji (+50zł)</option>
+                <option value="Studio Drakiel" disabled hidden data-price="0">Studio Drakiel (Wysoka)</option>
+                </select>
+            <div class="hint" id="quality-hint">Wybierz jakość dostarczanych plików.</div>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div>
+            <label for="length">Długość utworu</label>
+            <select id="length" name="Długość utworu" required>
+              <option value="" disabled selected hidden data-price="0">Wybierz długość...</option>
+              <option value="do 3 min" data-price="0">Do 3 minut</option>
+              <option value="3-4 min" data-price="20">3 - 4 minuty (+20zł)</option>
+              <option value="powyżej 4 min" data-price="30">Powyżej 4 minut (+30zł)</option>
+            </select>
+          </div>
+          <div>
+            <label for="stems">Ilość ścieżek (stems)</label>
+            <select id="stems" name="Ilość ścieżek" required>
+              <option value="" disabled selected hidden data-price="0">Wybierz ilość...</option>
+              <option value="do 5" data-price="0">Do 5 ścieżek</option>
+              <option value="5-7" data-price="20">5 - 7 ścieżek (+20zł)</option>
+              <option value="powyżej 7" data-price="40">Powyżej 7 ścieżek (+40zł)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+            <div>
+                <label style="color: #ca0c2c; font-weight: bold; font-size: 16px;">Tryb Ekspres (do 3 dni)</label>
+                <div class="toggle-container" id="express-toggle">
+                    <button type="button" class="toggle-btn" data-value="Nie" data-price="0">NIE</button>
+                    <button type="button" class="toggle-btn" data-value="Tak" data-price="100" style="position: relative;">
+                        TAK
+                        <span class="price-tag" style="position:absolute; top:35px; right:147px; font-size:10px; font-weight: bold; pointer-events:none;">+100zł</span>
+                    </button>
+                    </div>
+                <input type="hidden" id="express" name="Express" value="" required>
+            </div>
+            </div>
+
+        <div style="margin-bottom: 20px;">
+            <label>Prześlij ślady (paczka .ZIP lub .RAR)</label>
+            
+            <div id="file-drop-zone" class="custom-upload">
+                <img src="upload-icon.png" alt="Upload Icon" id="upload-icon">
+                <span id="file-name-display">Kliknij, aby dodać pliki lub przeciągnij je tutaj</span>
+            </div>
+
+            <input type="file" id="file-upload" name="Załącznik" accept=".zip,.rar,.7z" style="display: none;" />
+            
+            <p style="font-size: 12px; margin-top: 8px; color: #888;">Limit FormSubmit to 10MB. Większe paczki wyślij linkiem poniżej.</p>
+        </div>
+
+        <div style="margin-top: 15px;">
+          <label for="notes">Link do paczki ze śladami / Uwagi</label>
+          <textarea id="notes" name="Uwagi" placeholder="Wklej link do WeTransfer/Google Drive lub opisz swoje wizje co do miksu..."></textarea>
+        </div>
+
+        <div class="submit-row">
+          <button type="submit" class="btn">Przejdź do płatności / Wyślij</button>
+        </div>
+      </form>
+
+    </section>
+
+
+    <aside class="summary">
+      <h3>Podsumowanie</h3>
+      <div class="line"><span>Utwór</span><strong id="s-song">...</strong></div>
+      <div class="line"><span>Realizator</span><strong id="s-realizator">–</strong></div>
+      <div class="line"><span>Nagrano w</span><strong id="s-source">–</strong></div>
+      <div class="line"><span>Czas trwania</span><strong id="s-length">–</strong></div>
+      <div class="line"><span>Ścieżki</span><strong id="s-stems">–</strong></div>
+      <div class="line"><span>Express</span><strong id="s-express">–</strong></div>
+      <div class="line" style="margin-top: 10px; padding-top: 15px; border-top: 1px solid #444;">
+        <span>Do zapłaty:</span>
+        <span id="s-cena">150 zł</span>
+      </div>
+      <div class="hint" style="text-align: right; margin-top: 5px;">Cena zawiera podstawowy Mix & Master</div>
+    </aside>
+    
+  </main>
+
+  <div id="modal" class="modal">
+  <div class="modal-content">
+    <h2>Potwierdź zamówienie Mixu</h2>
+    <div id="confirmText">
+      </div>
+    <div class="submit-row" style="margin-top: 30px;">
+      <button type="button" class="btn btn-ghost" id="cancelConfirm">Wróć do edycji</button>
+      <button type="button" class="btn" id="acceptConfirm">Wyślij zamówienie</button>
+    </div>
+  </div>
+</div>
+<div class="fooder">
+  <div class="fooder-side left">
+    <img src="drakiel_logo.png" alt="Drakiel Logo Lewa" />
+  </div>
+
+  
+  <div class="fooder-text">
+    Drakiel to innowcja pozdro <br>
+    <p1>Created and designed by INDRAS STUDIO® for a special order by Drakiel®</p1>
+  </div>
+
+  <div class="fooder-side right">
+    <!-- Tu dodasz opcjonalnie inne logo -->
+     <img src="indras_logo.png" alt="Indras logo">
+  </div>
+
+  <script>
+    const BASE_PRICE = 150; 
+
+    const form = document.getElementById('form-mix');
+    const sourceSelect = document.getElementById('source');
+    const qualitySelect = document.getElementById('quality');
+    const qualityHint = document.getElementById('quality-hint');
+    const lengthSelect = document.getElementById('length');
+    const stemsSelect = document.getElementById('stems');
+    const expressHiddenInput = document.getElementById('express');
+    const songInput = document.getElementById('songName');
+    const realizatorSelect = document.getElementById('realizator');
+    const fileInput = document.getElementById('file-upload');
+    const hiddenPriceInput = document.getElementById('hidden-price');
+    const emailSubjectInput = document.getElementById('email-subject');
+
+    // Elementy podsumowania
+    const sSong = document.getElementById('s-song');
+    const sRealizator = document.getElementById('s-realizator');
+    const sSource = document.getElementById('s-source');
+    const sLength = document.getElementById('s-length');
+    const sStems = document.getElementById('s-stems');
+    const sExpress = document.getElementById('s-express');
+    const sCena = document.getElementById('s-cena');
+
+    function handleSourceChange() {
+        if (sourceSelect.value === 'Drakiel Studio') {
+            qualitySelect.value = 'Studio Drakiel'; 
+            qualitySelect.disabled = true; 
+            qualityHint.textContent = 'Jakość nagrania jest nam znana (nagrywane u nas).';
+        } else {
+            if (qualitySelect.value === 'Studio Drakiel') qualitySelect.value = "";
+            qualitySelect.disabled = false;
+            qualityHint.textContent = 'Wybierz jakość dostarczanych plików.';
+        }
+        updateSummary();
+    }
+
+    // Obsługa przycisków Express (Twój kod z poprawką czyszczenia klas)
+    const expressButtons = document.querySelectorAll('#express-toggle .toggle-btn');
+    expressButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            expressButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            expressHiddenInput.value = this.dataset.value;
+            updateSummary();
+        });
+    });
+
+    // JEDNA, POPRAWNA FUNKCJA PODSUMOWANIA
+    function updateSummary() {
+        let price = BASE_PRICE;
+
+        // Ceny z list rozwijanych
+        const qualityPrice = qualitySelect.selectedIndex >= 0 ? parseInt(qualitySelect.options[qualitySelect.selectedIndex].dataset.price || 0) : 0;
+        const lengthPrice = lengthSelect.selectedIndex >= 0 ? parseInt(lengthSelect.options[lengthSelect.selectedIndex].dataset.price || 0) : 0;
+        const stemsPrice = stemsSelect.selectedIndex >= 0 ? parseInt(stemsSelect.options[stemsSelect.selectedIndex].dataset.price || 0) : 0;
+
+        // POPRAWKA: Pobieranie ceny z AKTYWNEGO przycisku Express
+        const activeExpressBtn = document.querySelector('#express-toggle .toggle-btn.active');
+        const expressPrice = activeExpressBtn ? parseInt(activeExpressBtn.dataset.price || 0) : 0;
+
+        price += qualityPrice + lengthPrice + stemsPrice + expressPrice;
+
+        // Aktualizacja wizualna prawej kolumny
+        sSong.textContent = songInput.value || '...';
+        sRealizator.textContent = realizatorSelect.value || '–';
+        sSource.textContent = sourceSelect.value || '–';
+        sLength.textContent = lengthSelect.value ? lengthSelect.options[lengthSelect.selectedIndex].text.split('(')[0] : '–';
+        sStems.textContent = stemsSelect.value ? stemsSelect.options[stemsSelect.selectedIndex].text.split('(')[0] : '–';
+        
+        if (!expressHiddenInput.value) {
+            sExpress.textContent = '–';
+        } else {
+            sExpress.textContent = expressHiddenInput.value === 'Tak' ? 'TAK (+100zł)' : 'Nie';
+        }
+
+        sCena.textContent = price + ' zł';
+    }
+
+    const dropZone = document.getElementById('file-drop-zone');
+const realFileInput = document.getElementById('file-upload');
+const fileNameDisplay = document.getElementById('file-name-display');
+
+// Kliknięcie w duży obszar wywołuje kliknięcie w ukryty input
+dropZone.addEventListener('click', () => realFileInput.click());
+
+// Zmiana tekstu po wybraniu pliku
+realFileInput.addEventListener('change', function() {
+    if (this.files && this.files.length > 0) {
+        const name = this.files[0].name;
+        fileNameDisplay.textContent = "Wybrano: " + name;
+        dropZone.classList.add('file-selected');
+        fileNameDisplay.style.color = "#fff";
+    } else {
+        fileNameDisplay.textContent = "Kliknij, aby dodać pliki lub przeciągnij je tutaj";
+        dropZone.classList.remove('file-selected');
+    }
+});
+
+// Opcjonalnie: Obsługa przeciągania (drag & drop)
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.style.borderColor = "var(--main-red)";
+});
+
+dropZone.addEventListener('dragleave', () => {
+    dropZone.style.borderColor = "#383838";
+});
+
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    realFileInput.files = e.dataTransfer.files;
+    // Wywołaj ręcznie zdarzenie zmiany, żeby zaktualizować tekst
+    realFileInput.dispatchEvent(new Event('change'));
+});
+
+    // Event Listenery
+    sourceSelect.addEventListener('change', handleSourceChange);
+    [songInput, realizatorSelect, qualitySelect, lengthSelect, stemsSelect].forEach(el => {
+        el.addEventListener('input', updateSummary);
+        el.addEventListener('change', updateSummary);
+    });
+
+    // Modal
+    const modal = document.getElementById('modal');
+    const confirmText = document.getElementById('confirmText');
+    const acceptConfirm = document.getElementById('acceptConfirm');
+    const cancelConfirm = document.getElementById('cancelConfirm');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        let fileStatus = fileInput.files.length > 0 ? "Załączono plik" : "Brak pliku (sprawdź uwagi)";
+
+        confirmText.innerHTML = `
+            <div><span>Utwór:</span> <strong>${songInput.value}</strong></div>
+            <div><span>Realizator:</span> <strong>${realizatorSelect.value}</strong></div>
+            <div><span>Miejsce:</span> <strong>${sourceSelect.value}</strong></div>
+            <div><span>Jakość:</span> <strong>${qualitySelect.value}</strong></div>
+            <div><span>Pliki:</span> <strong>${fileStatus}</strong></div>
+            <div><span>Express:</span> <strong>${expressHiddenInput.value || 'Nie'}</strong></div>
+            <div style="border:none; margin-top:15px; font-size: 22px;"><span>Suma:</span> <strong>${sCena.textContent}</strong></div>
+        `;
+        modal.classList.add('active');
+    });
+
+    cancelConfirm.addEventListener('click', () => modal.classList.remove('active'));
+    
+    acceptConfirm.addEventListener('click', () => {
+        modal.classList.remove('active');
+        form.submit(); 
+    });
+
+    // Start
+    updateSummary();
+</script>
+</body>
+</html>
