@@ -559,7 +559,8 @@
     header nav {
         flex-wrap: wrap !important;
         justify-content: center !important;
-        gap: 12px 20px !important;
+        font-size: 14px;
+        gap: 12px 15px !important;
     }
 
     /* 2. Sekcja Hero - napisy i przyciski */
@@ -778,7 +779,7 @@
         min-height: 450px !important;   /* Taka sama wysokość jak reszta */
         width: 75vw !important;         /* Taka sama szerokość */
         box-shadow: none !important;    /* Opcjonalnie: usuwa cień, jeśli chcesz pełnej spójności */
-        border: 1px solid rgba(255, 255, 255, 0.1) !important; /* Taka sama ramka */
+        border: solid rgba(255, 0, 64, 0.596) 1px !important; /* Taka sama ramka */
     }
 
     /* Jeśli używałeś dodatkowego marginesu dla sąsiednich elementów przez #most */
@@ -809,5 +810,94 @@
     .box, .s-box2 {
         max-width: 100% !important;
         box-sizing: border-box !important;
+    }
+
+    .main-content-title {
+        margin-bottom: 30px !important; /* Większy odstęp pod napisem */
+        padding-top: 20px !important;
+    }
+
+    .main-content {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important; /* Układ 2 kolumny */
+        gap: 15px !important;
+        padding: 10px 20px !important;
+        margin-top: 10px !important; /* Dodatkowe obniżenie boksów */
+    }
+
+    .box {
+        height: 110px !important; /* Stała wysokość boksów */
+        font-size: 14px !important;
+        padding: 10px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    /* 2. Poprawa sekcji Zasady (Rules) */
+    .rules-container {
+        display: block !important;
+        padding: 40px 20px !important; /* Normalny margines od boków */
+        height: auto !important;
+        width: 100% !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* 2. Naprawa ramki zasad - usunięcie stałej wysokości */
+    .rules {
+        width: 100% !important;
+        height: auto !important; /* Pozwala ramce rosnąć wraz z tekstem */
+        min-height: 300px !important; 
+        padding: 60px 20px 20px 20px !important; /* Miejsce na nagłówek "Zasady" */
+        margin: 0 auto !important;
+        background-size: 100% 100% !important; /* Rozciąga tło do tekstu */
+        position: relative !important;
+        display: block !important;
+        /* Podmień 'rules-img-mobile.png' na nazwę swojego nowego pliku */
+        background-image: url('rules-img-mobile.png') !important;/
+        /* background-position: center !important; */
+    }
+
+    /* 3. Pozycjonowanie napisu "Zasady Sesji" */
+    .rules-text {
+        font-size: 24px !important;
+        position: absolute !important;
+        top: 15px !important;
+        left: 20px !important;
+        margin: 0 !important;
+        width: auto !important;
+    }
+
+    /* 4. Lista zasad - usunięcie pozycji absolutnej */
+    .rules ol {
+        position: static !important; /* Wrzuca listę do normalnego obiegu treści */
+        margin: 10px 0 0 15px !important;
+        padding: 0 !important;
+        width: 90% !important;
+        font-size: 14px !important;
+    }
+
+    .rules li {
+        padding: 5px 0 !important;
+        line-height: 1.4 !important;
+    }
+
+    /* 5. Przesunięcie sekcji rezerwacji, aby nie nachodziła na zasady */
+    h4 {
+        margin-top: 60px !important; /* Solidny odstęp od zasad */
+        position: relative !important;
+        clear: both !important; /* Zapobiega przyklejaniu się do elementów nad nim */
+    }
+
+    .buy-s {
+        padding: 20px !important;
+        height: auto !important;
+    }
+
+    .buy-s-box {
+        width: 100% !important;
+        height: 200px !important;
+        margin-top: 10px !important;
     }
 }
