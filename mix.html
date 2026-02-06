@@ -33,7 +33,7 @@
 
     body {
       margin: 0;
-      background: var(--dark-bg);
+      background-color: #0d0d0d;
       color: var(--text-white);
       font-family: Inter, system-ui, sans-serif;
       /* font-family: Century Gothic; */
@@ -249,7 +249,7 @@
             }
 
             .custom-upload span {
-                font-family: Century Gothic;
+                font-family: 'centurygothic'  sans-serif !important;
                 font-size: 14px;
                 color: #ccc;
             }
@@ -258,10 +258,113 @@
             .custom-upload.file-selected {
                 border-color: #28a745; /* Zielony kolor po sukcesie */
             }
+
+            .fooder-text {
+              text-align: center;
+              font-size: 20px;
+              flex: 1;
+            }
+
+            .fooder-text p1 {
+              font-size: 10px;
+              display: block;
+              margin-top: 5px;
+              font-family: 'centurygothic'  sans-serif !important;
+            }
+
+            @media (max-width: 768px) {
+    /* 1. Usunięcie sztywnych szerokości rozpychających ekran */
+    html, body {
+        overflow-x: hidden !important; /* Blokada przesuwania na boki */
+        width: 100% !important;
+    }
+
+    /* 2. Naprawa głównego kontenera - teraz będzie responsywny */
+    .page {
+        width: 100% !important;      /* Okienko zajmuje 92% szerokości ekranu */
+        max-width: none !important; /* Wyłączamy blokadę 600px */
+        margin: 150px auto 70px auto !important; /* Centrowanie i odstęp od góry */
+        padding: 5px !important;    /* Mniejszy padding, żeby było więcej miejsca na tekst */
+        float: none !important;
+        left: -450px !important;
+    }
+
+    .form-group label {
+        font-size: 14px !important; /* Czytelniejsze etykiety */
+        margin-bottom: 8px !important;
+    }
+
+    .form-group input, 
+    .form-group select, 
+    .form-group textarea {
+        width: 100% !important;
+        font-size: 16px !important; /* Zapobiega auto-zoomowaniu w iPhone'ach */
+        padding: 12px !important;
+        border-radius: 10px !important;
+    }
+
+    /* 4. Naprawa przycisku Express (Napis +100zł) */
+    .express-toggle {
+        display: flex !important;
+        align-items: center !important;
+        flex-wrap: wrap !important; /* W razie bardzo małych ekranów zawinie tekst */
+        gap: 10px !important;
+        margin: 20px 0 !important;
+    }
+
+    .express-toggle span {
+        position: static !important; /* Wyciąga napis z pozycji absolutnej */
+        font-size: 14px !important;
+        margin: 0 !important;
+    }
+
+    /* 5. Podsumowanie i przyciski na dole */
+    .summary {
+        padding: 15px !important;
+        border-radius: 12px !important;
+    }
+
+    .summary-item {
+        font-size: 13px !important; /* Mniejszy tekst podsumowania */
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #sum-cena {
+        font-size: 22px !important; /* Podkreślenie ceny */
+    }
+
+    .submit-btn {
+        width: 100% !important;
+        padding: 16px !important;
+        font-size: 18px !important;
+        border-radius: 12px !important;
+    }
+    
+    /* 6. Naprawa modala potwierdzenia (żeby nie był ucięty) */
+    .modal-content {
+        width: 95% !important;
+        padding: 20px !important;
+    }
+}
   </style>
 </head>
 
 <body>
+      <div id="mini-header-mobile" class="mini-header mobile-only">
+    <img src="drakiel_logo.png" alt="Logo" class="mini-logo">
+    <div id="mobile-menu-btn" class="hamburger-two">
+        <span></span>
+        <span></span>
+          </div>
+      </div>
+
+      <div id="mobile-nav-overlay" class="mobile-nav mobile-only">
+          <a href="index.html">Studio</a>
+          <a href="mix.html">Mix&Mastering</a>
+          <a href="sesja.html">Sesja</a>
+          <a href="bup.html">Portfolio</a>
+      </div>
   <header>
     <div class="logo-title">
       <img src="drakiel_logo.png" alt="Drakiel Logo" />
@@ -433,7 +536,7 @@
 
   
   <div class="fooder-text">
-    Drakiel to innowcja pozdro <br>
+    <strong>Drakiel to innowcja pozdro </strong><br>
     <p1>Created and designed by INDRAS STUDIO® for a special order by Drakiel®</p1>
   </div>
 
@@ -520,6 +623,11 @@
         }
 
         sCena.textContent = price + ' zł';
+
+        const stickyVal = document.getElementById('sticky-sum-value');
+        if (stickyVal) {
+            stickyVal.textContent = cena + " zł";
+        }
     }
 
     const dropZone = document.getElementById('file-drop-zone');
@@ -606,6 +714,52 @@ dropZone.addEventListener('drop', (e) => {
 
     // Start
     updateSummary();
+
+    // 1. Znajdź elementy
+    const mainPriceDisplay = document.getElementById('sum-cena');
+    const stickyPriceDisplay = document.getElementById('sticky-sum-value');
+    const stickyBarContainer = document.getElementById('sticky-price-bar');
+    const summarySection = document.querySelector('.summary');
+
+    // 2. Funkcja synchronizująca ceny
+    function syncPrices() {
+        if (mainPriceDisplay && stickyPriceDisplay) {
+            stickyPriceDisplay.innerText = mainPriceDisplay.innerText;
+        }
+    }
+
+    // 3. Obserwator zmian (MutationObserver) - reaguje na każdą zmianę tekstu w sumie
+    const priceObserver = new MutationObserver(() => {
+        syncPrices();
+    });
+
+    if (mainPriceDisplay) {
+        priceObserver.observe(mainPriceDisplay, { 
+            childList: true, 
+            characterData: true, 
+            subtree: true 
+        });
+        // Uruchom raz na starcie
+        syncPrices();
+    }
+
+    // 4. Logika chowania paska, gdy użytkownik dotrze do pełnego podsumowania
+    window.addEventListener('scroll', () => {
+        if (!summarySection || !stickyBarContainer) return;
+
+        const rect = summarySection.getBoundingClientRect();
+        // Jeśli górna krawędź sekcji .summary wejdzie w widok ekranu
+        if (rect.top <= window.innerHeight) {
+            stickyBarContainer.style.opacity = "0";
+            stickyBarContainer.style.visibility = "hidden";
+            stickyBarContainer.style.pointerEvents = "none";
+        } else {
+            stickyBarContainer.style.opacity = "1";
+            stickyBarContainer.style.visibility = "visible";
+            stickyBarContainer.style.pointerEvents = "auto";
+        }
+});
 </script>
+<script src="drakiel_studio.js"></script>
 </body>
 </html>
