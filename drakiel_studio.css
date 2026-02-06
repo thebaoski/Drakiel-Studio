@@ -552,8 +552,8 @@
     /* 2. Sekcja Hero - napisy i przyciski */
       .hero {
           height: auto !important;         /* Pozwala sekcji urosnąć wraz z zawartością */
-          min-height: 800px !important;    /* Gwarantuje minimalną wysokość */
-          padding: 100px 30px !important;   /* Dodaje dużo miejsca na górze i na dole (oddech) */
+          min-height: 700px !important;    /* Gwarantuje minimalną wysokość */
+          padding: 80px 30px !important;   /* Dodaje dużo miejsca na górze i na dole (oddech) */
           display: flex !important;
           align-items: center !important;
           justify-content: center !important;
@@ -691,4 +691,5 @@
         max-width: 100% !important;
         box-sizing: border-box !important;
     }
+
 }
