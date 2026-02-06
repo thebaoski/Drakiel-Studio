@@ -516,3 +516,132 @@
           background-position: 0% 50%;
         }
       }
+
+      @media (max-width: 768px) {
+    /* 1. Nagłówek - pełne wyśrodkowanie */
+    header {
+        flex-direction: column !important;
+        height: auto !important;
+        padding: 15px 10px !important;
+        gap: 15px !important;
+    }
+
+    header .logo-title {
+        justify-content: center !important;
+        margin: 0 !important;
+    }
+
+    header nav {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 12px 20px !important;
+    }
+
+    /* 2. Sekcja Hero - napisy i przyciski */
+    .hero {
+        height: 60vh !important; /* Trochę niższa na telefonie */
+        min-height: 400px;
+    }
+
+    .hero-content h2 {
+        font-size: 1.8rem !important;
+        line-height: 1.2;
+        margin-bottom: 20px;
+    }
+
+    .hero-buttons {
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 280px;
+        gap: 12px !important;
+    }
+
+    .hero-buttons button {
+        width: 100% !important;
+        padding: 15px !important;
+        font-size: 16px !important;
+    }
+
+    /* 3. Sekcja "Korzystaj z Studia!" - pionowe boksy */
+    .selection2 {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 20px !important;
+        gap: 20px !important;
+        right: -20px;
+    }
+
+    .s-box2 {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 25px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 4. Sekcja "Nasze Narzędzia" - siatka 2x3 */
+    .main-content {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+        padding: 10px !important;
+    }
+
+    .box {
+        height: 100px !important;
+        font-size: 13px !important;
+        padding: 10px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    /* 5. Zasady Sesji - tekst */
+    .rules-container {
+        padding: 15px !important;
+    }
+
+    .rules {
+        width: 100% !important;
+        padding: 20px !important;
+        box-sizing: border-box !important;
+    }
+
+    .rules-text {
+        font-size: 24px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .rules ol li {
+        font-size: 14px !important;
+        margin-bottom: 12px !important;
+    }
+
+    /* 6. Duży przycisk "Zarezerwuj Sesje" na dole */
+    .buy-s-box {
+        width: 90% !important;
+        height: 150px !important;
+    }
+
+    /* 7. Stopka (Footer) - układ pionowy */
+    .fooder {
+        flex-direction: column !important;
+        height: auto !important;
+        padding: 40px 20px !important;
+        gap: 30px !important;
+        text-align: center !important;
+    }
+
+    .fooder-side {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .fooder-side img {
+        max-width: 80px !important;
+    }
+
+    .fooder-text {
+        font-size: 14px !important;
+        line-height: 1.6;
+    }
+}
