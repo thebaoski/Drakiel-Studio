@@ -26,9 +26,22 @@
     }
 
     @font-face {
+    font-family: 'CenturyGothic';
+    src: url('centurygothic.ttf') format('truetype'); /* ttf to format truetype */
+    }
+
+    @font-face {
     font-family: 'StretchPro';
     src: url('StretchPro.otf') format('opentype');
-    } 
+    }
+
+    @font-face {
+    font-family: 'CenturyGothic';
+    src: url('centurygothic_bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
     
     .logo-title {
       display: flex;
@@ -231,7 +244,7 @@
       .s-box2 p1{
         font-size: 15px;
         font-weight: normal;
-        font-family: Century Gothic;
+        font-family: 'centurygothic', sans-serif !important;
       }
 
       .rules-container {
@@ -271,7 +284,7 @@
 
     .rules ol{
       font-weight: normal;
-        font-family: Century Gothic;
+        font-family: 'centurygothic', sans-serif !important;
       top: 80px ;
       margin: 20px;
       margin-left: 40px;
@@ -553,7 +566,7 @@
       .hero {
           height: auto !important;         /* Pozwala sekcji urosnąć wraz z zawartością */
           min-height: 700px !important;    /* Gwarantuje minimalną wysokość */
-          padding: 80px 30px !important;   /* Dodaje dużo miejsca na górze i na dole (oddech) */
+          padding: 40px 30px !important;   /* Dodaje dużo miejsca na górze i na dole (oddech) */
           display: flex !important;
           align-items: center !important;
           justify-content: center !important;
@@ -691,5 +704,4 @@
         max-width: 100% !important;
         box-sizing: border-box !important;
     }
-
 }
