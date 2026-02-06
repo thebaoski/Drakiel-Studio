@@ -1,0 +1,1002 @@
+* 
+{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #0d0d0d;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 20px 50px;
+      background: rgba(0, 0, 0, 0.329);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    @font-face {
+    font-family: 'CenturyGothic';
+    src: url('centurygothic.ttf') format('truetype'); /* ttf to format truetype */
+    }
+
+    @font-face {
+    font-family: 'StretchPro';
+    src: url('StretchPro.otf') format('opentype');
+    }
+
+    @font-face {
+    font-family: 'CenturyGothic';
+    src: url('centurygothic_bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+    
+    .logo-title {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo-title img {
+      height: 60px;
+    }
+
+    .logo-title h1 {
+      font-size: 2.5rem;
+      font-family: 'StretchPro', sans-serif !important;
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #ca0c2c;
+    }
+
+    .hero {
+      height: 100vh;
+      background: url('https://images.unsplash.com/photo-1580151021074-6c2baf1a862e') no-repeat center center/cover;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+      }
+  
+      .hero-buttons {
+        margin-top: 20px;
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+      }
+  
+      .hero-buttons button {
+        padding: 14px 27px;
+        font-size: 1rem;
+        background: #111111;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+        border-radius: 20px;
+        border: 0 ;
+      }
+  
+      .hero-buttons button:hover {
+        background: #ca0c2c;
+        transform: scale(0.98);
+      }
+  
+      .main-content {
+        padding: 150px 80px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+      }
+
+      .main-content-title{
+        font-size: 40px;
+        text-align: center;
+        margin-top: 70px;
+        margin-bottom: -60px;
+        padding: 0 80px;
+        text-decoration: underline;
+      }
+  
+      .box {
+        background: #202020;
+        padding: 100px 10px;
+        text-align: center;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        transition: 0.3s;
+        position: relative;
+        overflow: hidden;
+      }
+  
+      .box::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: #ca0c2c;
+        backdrop-filter: blur(6px);
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+        z-index: 1;
+      }
+  
+      .box .hover-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #ffffff;
+        font-size: 1rem;
+        opacity: 0;
+        z-index: 2;
+        transition: opacity 0.3s ease;
+        padding: 20px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+      }
+  
+      .box:hover::before {
+        opacity: 1;
+      }
+  
+      .box:hover .hover-text {
+        opacity: 1;
+      }
+
+      h3 {
+        font-size: 40px;
+        text-align: center;
+        margin-top: 50px;
+        padding: 0 80px;
+        text-decoration: underline;
+      }
+
+      h4 {
+        font-size: 40px;
+        text-align: center;
+        margin-top: 50px;
+        padding: 0 80px;
+        text-decoration: underline;
+      }
+
+      h5 {
+        font-size: 40px;
+        text-align: center;
+        margin-top: 50px;
+        padding: 0 80px;
+        text-decoration: underline;
+      }
+
+      .selection2{
+        display: grid;
+        padding: 50px 80px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        justify-content: center;
+      }
+
+      .s-box2 {
+        justify-content: center;
+        background: #272727;
+        padding: 60px;
+        text-align: left;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        transition: 0.3s;
+        position: relative;
+        overflow: hidden;
+        gap: 30px;
+      }
+
+      .s-box2:hover{
+        background-color: #ca0c2c;
+        box-shadow: 0 0 30px rgba(0,0,0,0.5);
+      }
+
+      .s-box2 p{
+        font-size: 30px;
+      }
+
+      .s-box2 p1{
+        font-size: 15px;
+        font-weight: normal;
+        font-family: 'centurygothic', sans-serif !important;
+      }
+
+      .rules-container {
+      display: flex;
+        padding: 50px 450px;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 80px;
+        justify-content: right;
+    }
+
+    .rules {
+      display: flex;
+      margin-top: 40px;
+      width: 870px;
+      height: 520px;
+         background-image: url('rules-img.png');
+      background-size: cover;      /* dopasowanie */
+       background-position: center; /* wyśrodkowanie */
+       background-repeat: no-repeat;
+        padding: 20px;
+        text-align: left;
+        border-radius: 0;
+        transition: 0.3s;
+        position: relative;
+        overflow: visible;
+    }
+
+    .rules-text{
+      color: white;
+      font-size: 45px;
+      position: absolute;  
+      margin-right: 300px;
+      top: 20px; /* ile ma wystawać nad box */
+      left: -50px; /* opcjonalnie przesunięcie w bok */
+      z-index: inherit;
+    }
+
+    .rules ol{
+      font-weight: normal;
+        font-family: 'centurygothic', sans-serif !important;
+      top: 80px ;
+      margin: 20px;
+      margin-left: 40px;
+      color: white;
+      font-size: 19px;
+      position: absolute;  
+      margin-right: 150px;
+      z-index: inherit;
+    }
+
+    .rules li{
+      padding: 7px;
+    }
+
+    .rules:hover {
+        transform: scale(1.01);
+    }
+
+      .buy-s{
+        display: flex;
+        margin-top: 40px;
+        padding: 50px 80px;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 30px;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .buy-s-box{
+        justify-content: center;
+        align-items: center;
+        background: #272727;
+        height: 550px;
+        width: 1050px;
+        /* padding: 60px; */
+        text-align: left;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        transition: 0.3s;
+        position: relative;
+        overflow: hidden;
+        gap: 30px;
+      }
+
+      .buy-s-box:hover {
+        transform: scale(1.01);
+    }
+
+    .content-side {
+      padding: 400px;
+      margin: 65px 0;
+      background-color: #202020;
+    }
+
+
+    .fooder {
+      padding: 40px;
+      background-color: black;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .fooder-side {
+      width: 50px; /* szerokość rezerwowa na logo */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .fooder-text {
+      text-align: center;
+      font-size: 20px;
+      flex: 1;
+    }
+
+    .fooder-text p1 {
+      font-size: 10px;
+      display: block;
+      margin-top: 5px;
+      font-family: 'centurygothic'  sans-serif !important;
+    }
+
+    .fooder img {
+      height: 50px;
+    }
+      .cennik-container {
+        display: grid;
+        padding: 50px 180px;
+        grid-template-columns: repeat(3, 2fr);
+        gap: 80px;
+        margin-top: 200px;
+        margin-bottom: 250px;
+      }
+
+      .cennik {
+        background: #272727;
+        position: relative;
+        padding: 50px;
+        height: 600px;
+        /* max-width: 420px; */
+        padding-bottom: 120px;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        transition: 0.3s;
+        /* position: relative; */
+        overflow: hidden;
+      }
+
+      .cennik p{
+        font-size: 45px;
+        margin-bottom: 15px;
+      }
+
+      .cennik ul{
+        font-size: 15px;
+        font-family: 'centurygothic'  sans-serif !important;
+        margin-top: 20px;
+      }
+
+      /* .cennik ul1{
+        font-size: 18px;
+        font-family: Century Gothic;
+        margin-bottom: 10px;
+      } */
+
+      .cennik p1{
+        font-size: 15px;
+        font-family: 'centurygothic'  sans-serif !important;
+        margin-top: 30px;
+      }
+
+      .cennik-price{
+        border-top: solid #ffffff15 1px;
+        position: absolute;
+        bottom: 20px;           /* Odległość od dołu */
+        left: 50%;              
+        transform: translateX(-50%);
+        text-align: center;
+        width: 100%;
+        font-weight: bold;
+        font-size: 2.5rem;
+
+      }
+
+      .cennik-price p2{
+        position: absolute;
+        bottom: 110px;           /* Odległość od dołu */
+        left: 50%;              
+        transform: translateX(-50%);
+        text-align: center;
+        width: 100%;
+        color: #e91437;
+        font-style: normal;
+        font-size: 0.8rem;
+
+      }
+
+      .cennik-price p3{
+        font-size: 20px;
+        /* transition: color 0.4s ease; */
+      }
+
+      .cennik:hover p3{
+        text-decoration: underline;
+      }
+
+      .cennik:hover {
+        box-shadow: 0 0 50px rgba(139, 24, 39, 0.308);
+        transform: scale(1.02);
+      }
+
+      #most {
+        margin-top: -50px;
+        height: 650px;
+        max-width: 450px;
+        /* box-shadow: 0 0 50px rgba(255, 255, 255, 0.637); */
+        border: solid rgba(255, 0, 64, 0.596) 1px ;
+        box-shadow: 0 0 50px rgba(255, 0, 64, 0.452);
+      }
+
+      #premium {
+        /* box-shadow: 0 0 60px rgba(255, 0, 34, 0.308); */
+        border: solid rgb(187, 176, 77) 0px;
+        /* box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); */
+      }
+
+      #most:hover {
+        box-shadow: 0 0 30px rgba(255, 0, 64, 0.788);
+        border: solid rgba(255, 0, 64, 0.596) 1px ;
+      }
+
+      #premium:hover {
+        box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        color: #d4af37;
+      }
+      /* #premium:hover .gradient-text {
+        background: linear-gradient(270deg, #d4af37, #ccbc73, #d4af37);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        animation: goldFlow 5s ease infinite;
+        transition: background-position 3s ease, opacity 0.4s ease;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      #premium:hover .gradient-text ul {
+        position: relative;
+        list-style: none;
+        padding-left: 0;
+        margin-right: 0px;
+      }
+
+      #premium:hover .gradient-text li {
+        position: relative;
+        display: flex;
+        left: 0px;
+      }
+
+      #premium:hover .gradient-text li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-size: 1.2em;
+        line-height: 1;
+        background: inherit; 
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        animation: inherit;
+      } */
+
+      /* Animacja gradientu */
+    @keyframes goldFlow {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .mobile-only {
+    display: none !important;
+}
+
+      @media (max-width: 768px) {
+    /* 1. Nagłówek - pełne wyśrodkowanie */
+          html, body {
+          max-width: 100%;
+          overflow-x: hidden; /* To ukryje wszystko, co wystaje poza prawą krawędź */
+          margin: 0;
+          padding: 0;
+      }
+    header {
+        flex-direction: column !important;
+        height: auto !important;
+        padding: 15px 10px !important;
+        gap: 15px !important;
+    }
+
+    header .logo-title {
+        justify-content: center !important;
+        margin: 0 !important;
+    }
+
+    header nav {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        font-size: 14px;
+        gap: 12px 15px !important;
+    }
+
+    /* 2. Sekcja Hero - napisy i przyciski */
+      .hero {
+          height: auto !important;         /* Pozwala sekcji urosnąć wraz z zawartością */
+          min-height: 700px !important;    /* Gwarantuje minimalną wysokość */
+          padding: 40px 30px !important;   /* Dodaje dużo miejsca na górze i na dole (oddech) */
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+      }
+
+      /* 2. Wyśrodkowanie napisów i kontenera przycisków */
+      .hero-content {
+          width: 100% !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;  /* Środkuje napisy i przyciski w poziomie */
+          text-align: center !important;
+      }
+
+      .hero-content h2 {
+          font-size: 1.8rem !important;
+          margin-bottom: 30px !important;
+      }
+
+      /* 3. Wyśrodkowanie przycisków */
+      .hero-buttons {
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;  /* Środkuje przyciski względem siebie */
+          justify-content: center !important;
+          width: 100% !important;
+          max-width: 300px !important;     /* Ogranicza szerokość, by nie były za długie */
+          gap: 15px !important;
+          margin: 0 auto !important;       /* Środkuje cały blok przycisków na stronie */
+      }
+
+      .hero-buttons button {
+          width: 100% !important;          /* Przyciski mają taką samą szerokość */
+          padding: 16px !important;
+          font-size: 16px !important;
+      }
+
+    /* 3. Sekcja "Korzystaj z Studia!" - pionowe boksy */
+    .selection2 {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 20px !important;
+        gap: 20px !important;
+        right: -20px;
+    }
+
+    .s-box2 {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 25px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 4. Sekcja "Nasze Narzędzia" - siatka 2x3 */
+    .main-content {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+        padding: 10px !important;
+    }
+
+    .box {
+        height: 100px !important;
+        font-size: 13px !important;
+        padding: 10px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    /* 5. Zasady Sesji - tekst */
+    .rules-container {
+        padding: 15px !important;
+    }
+
+    .rules {
+        width: 100% !important;
+        padding: 20px !important;
+        box-sizing: border-box !important;
+    }
+
+    .rules-text {
+        font-size: 24px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .rules ol li {
+        font-size: 14px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .buy-s-box {
+        width: 90% !important;
+        height: 150px !important;
+    }
+
+    .fooder {
+        flex-direction: column !important;
+        height: auto !important;
+        padding: 40px 20px !important;
+        gap: 30px !important;
+        text-align: center !important;
+    }
+
+    .fooder-side {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .fooder-side img {
+        max-width: 80px !important;
+    }
+
+    .fooder-text {
+        font-size: 14px !important;
+        line-height: 1.6;
+    }
+
+    .cennik-container {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        padding: 20px !important;
+        gap: 20px !important;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        align-items: flex-start !important;
+    }
+
+    .cennik-container {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        padding: 20px !important;
+        gap: 15px !important; /* Mniejsze odstępy między kafelkami */
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        align-items: stretch !important; /* Kafelki będą równej wysokości */
+    }
+
+    .cennik {
+        min-width: 70vw !important;     /* Nieco węższe, bardziej jak na PC */
+        max-width: 80vw !important;
+        min-height: 450px !important;   /*Zredukowana wysokość */
+        max-height: 520px !important;
+        flex-shrink: 0 !important;
+        scroll-snap-align: center;
+        padding: 20px !important;       /* Mniejszy padding wewnętrzny */
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important; /* Treść trzyma się góry, nie rozlatuje się */
+        box-sizing: border-box !important;
+    }
+
+    /* Tytuł kafelka */
+    .cennik p {
+        font-size: 25px !important;
+        margin: 0 0 10px 0 !important; /* Mały margines pod tytułem */
+        line-height: 1.2 !important;
+        font-weight: bold;
+    }
+
+    /* Opis pod tytułem */
+    .cennik p1 {
+        font-size: 13px !important;
+        /* margin-top: 15px !important; Mały margines pod opisem */
+        margin-bottom: 20px !important;
+        display: block !important;
+    }
+
+    /* Lista zalet - usunięcie nadmiarowych przerw */
+    .cennik ul {
+        padding-left: 18px !important;
+        margin: 0 !important; /* Kasujemy marginesy listy */
+        margin-bottom: 10px ;
+    }
+
+    .cennik ul li {
+        font-size: 12px !important;
+        margin-bottom: 5px !important; /* Mały odstęp między punktami */
+        line-height: 1.3 !important;
+    }
+
+    /* Usuwamy puste przerwy <br> jeśli są w kodzie, aby nie robiły dziur */
+    /* .cennik br {
+        display: none; 
+    } */
+
+    /* Sekcja ceny - przyklejona do dołu, ale bez ogromnej dziury */
+    .cennik-price {
+        margin-top: auto !important; /* Popycha cenę na dół kafelka */
+        padding-top: 0px !important;
+        text-align: center;
+    }
+
+    .cennik-price br {
+        display: inline !important; /* Tu pozwalamy na <br> dla układu ceny */
+    }
+}
+
+@media (max-width: 768px) {
+    /* Ujednolicenie rozmiaru środkowego kafelka */
+    #most {
+        transform: scale(1) !important; /* Usuwa ewentualne powiększenie */
+        margin: 0 !important;           /* Resetuje marginesy, które mogły go wypychać */
+        min-height: 450px !important;   /* Taka sama wysokość jak reszta */
+        width: 75vw !important;         /* Taka sama szerokość */
+        box-shadow: none !important;    /* Opcjonalnie: usuwa cień, jeśli chcesz pełnej spójności */
+        border: solid rgba(255, 0, 64, 0.596) 1px !important; /* Taka sama ramka */
+    }
+
+    /* Jeśli używałeś dodatkowego marginesu dla sąsiednich elementów przez #most */
+    .cennik-container {
+        align-items: stretch !important; /* Wymusza tę samą wysokość wszystkich dzieci */
+    }
+
+    /* Ukrycie napisu "Najczęściej wybierane" jeśli zajmuje za dużo miejsca (opcjonalnie) */
+    #most p2 {
+        font-size: 10px !important;
+        display: block !important;
+        margin-bottom: 5px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Upewniamy się, że każdy duży kontener nie jest szerszy niż ekran */
+    .page, .selection2, .main-content, .hero, .rules-container, .fooder {
+        width: 100% !important;
+        max-width: 100vw !important;
+        box-sizing: border-box !important; /* Ważne: padding nie powiększa już elementu */
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        overflow: hidden; /* Dodatkowe zabezpieczenie dla każdego boks */
+    }
+
+    /* Jeśli masz jakieś stałe szerokości w .box lub .s-box2, zresetuj je */
+    .box, .s-box2 {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .main-content-title {
+        margin-bottom: 30px !important; /* Większy odstęp pod napisem */
+        padding-top: 20px !important;
+    }
+
+    .main-content {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important; /* Układ 2 kolumny */
+        gap: 15px !important;
+        padding: 10px 20px !important;
+        margin-top: 10px !important; /* Dodatkowe obniżenie boksów */
+    }
+
+    .box {
+        height: 110px !important; /* Stała wysokość boksów */
+        font-size: 14px !important;
+        padding: 10px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    /* 2. Poprawa sekcji Zasady (Rules) */
+    .rules-container {
+        display: block !important;
+        padding: 40px 20px !important; /* Normalny margines od boków */
+        height: auto !important;
+        width: 100% !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* 2. Naprawa ramki zasad - usunięcie stałej wysokości */
+    .rules {
+        width: 100% !important;
+        height: auto !important; /* Pozwala ramce rosnąć wraz z tekstem */
+        min-height: 300px !important; 
+        padding: 60px 20px 20px 20px !important; /* Miejsce na nagłówek "Zasady" */
+        margin: 0 auto !important;
+        background-size: 100% 100% !important; /* Rozciąga tło do tekstu */
+        position: relative !important;
+        display: block !important;
+        /* Podmień 'rules-img-mobile.png' na nazwę swojego nowego pliku */
+        background-image: url('rules-img-mobile.png') !important;/
+        /* background-position: center !important; */
+    }
+
+    /* 3. Pozycjonowanie napisu "Zasady Sesji" */
+    .rules-text {
+        font-size: 24px !important;
+        position: absolute !important;
+        top: 15px !important;
+        left: 20px !important;
+        margin: 0 !important;
+        width: auto !important;
+    }
+
+    /* 4. Lista zasad - usunięcie pozycji absolutnej */
+    .rules ol {
+        position: static !important; /* Wrzuca listę do normalnego obiegu treści */
+        margin: 10px 0 0 15px !important;
+        padding: 0 !important;
+        width: 90% !important;
+        font-size: 14px !important;
+    }
+
+    .rules li {
+        padding: 5px 0 !important;
+        line-height: 1.4 !important;
+    }
+
+    /* 5. Przesunięcie sekcji rezerwacji, aby nie nachodziła na zasady */
+    h4 {
+        margin-top: 60px !important; /* Solidny odstęp od zasad */
+        position: relative !important;
+        clear: both !important; /* Zapobiega przyklejaniu się do elementów nad nim */
+    }
+
+    .buy-s {
+        padding: 20px !important;
+        height: auto !important;
+    }
+
+    .buy-s-box {
+        width: 100% !important;
+        height: 200px !important;
+        margin-top: 10px !important;
+    }
+  }
+   /* Ukrywanie na komputerze */
+.mobile-only {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    .mobile-only {
+        display: flex !important;
+    }
+
+    /* Standardowy header zostaje na górze strony */
+    header {
+        position: absolute !important;
+        top: 0;
+        width: 100%;
+    }
+
+    /* Styl Mini Headera */
+    .mini-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 40px;
+        background: rgba(10, 10, 10, 0.527);
+        backdrop-filter: blur(10px);
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+        z-index: 9999;;
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.4s ease;
+    }
+
+    .mini-header.pokaz {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .mini-logo {
+        height: 25px;
+        width: auto;
+    }
+
+    /* Hamburger: Dwie Kreski */
+    .hamburger-two {
+        width: 17px;
+        height: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+        z-index: 10001;
+    }
+
+    .hamburger-two span {
+        width: 100%;
+        height: 2px;
+        background: white;
+        transition: 0.3s ease-in-out;
+    }
+
+    /* Animacja X */
+    .hamburger-two.open span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    .hamburger-two.open span:nth-child(2) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    /* Full-screen Menu */
+    .mobile-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        height: 100vh;
+        background: #0d0d0d;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+        z-index: 10000;
+        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mobile-nav.active {
+        right: 0;
+    }
+
+    .mobile-nav a {
+        color: white;
+        text-decoration: none;
+        font-size: 24px;
+        font-weight: bold;
+    }
+}
