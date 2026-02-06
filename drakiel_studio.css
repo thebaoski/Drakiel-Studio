@@ -42,7 +42,7 @@
 
     .logo-title h1 {
       font-size: 2.5rem;
-      font-family: Stretch Pro;
+      font-family: 'StretchPro', sans-serif !important;
     }
 
     nav {
@@ -550,29 +550,46 @@
     }
 
     /* 2. Sekcja Hero - napisy i przyciski */
-    .hero {
-        height: 60vh !important; /* Trochę niższa na telefonie */
-        min-height: 400px;
-    }
+      .hero {
+          height: auto !important;         /* Pozwala sekcji urosnąć wraz z zawartością */
+          min-height: 1000px !important;    /* Gwarantuje minimalną wysokość */
+          padding: 80px 20px !important;   /* Dodaje dużo miejsca na górze i na dole (oddech) */
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+      }
 
-    .hero-content h2 {
-        font-size: 1.8rem !important;
-        line-height: 1.2;
-        margin-bottom: 20px;
-    }
+      /* 2. Wyśrodkowanie napisów i kontenera przycisków */
+      .hero-content {
+          width: 100% !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;  /* Środkuje napisy i przyciski w poziomie */
+          text-align: center !important;
+      }
 
-    .hero-buttons {
-        flex-direction: column !important;
-        width: 100% !important;
-        max-width: 280px;
-        gap: 12px !important;
-    }
+      .hero-content h2 {
+          font-size: 1.8rem !important;
+          margin-bottom: 30px !important;
+      }
 
-    .hero-buttons button {
-        width: 100% !important;
-        padding: 15px !important;
-        font-size: 16px !important;
-    }
+      /* 3. Wyśrodkowanie przycisków */
+      .hero-buttons {
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;  /* Środkuje przyciski względem siebie */
+          justify-content: center !important;
+          width: 100% !important;
+          max-width: 300px !important;     /* Ogranicza szerokość, by nie były za długie */
+          gap: 15px !important;
+          margin: 0 auto !important;       /* Środkuje cały blok przycisków na stronie */
+      }
+
+      .hero-buttons button {
+          width: 100% !important;          /* Przyciski mają taką samą szerokość */
+          padding: 16px !important;
+          font-size: 16px !important;
+      }
 
     /* 3. Sekcja "Korzystaj z Studia!" - pionowe boksy */
     .selection2 {
