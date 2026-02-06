@@ -272,6 +272,27 @@
               font-family: 'centurygothic'  sans-serif !important;
             }
 
+            .rabat-text {
+              color: #2ecc71; /* Przyjemny dla oka, "psychologiczny" zielony */
+              font-size: 0.8em;
+              font-weight: bold;
+              margin-left: 5px;
+              align-items: center;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+          }
+
+          /* Animacja delikatnego pulsowania, żeby przyciągnąć wzrok do oszczędności */
+          .pulse-green {
+              animation: pulseGreen 2s infinite;
+          }
+
+        @keyframes pulseGreen {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
             @media (max-width: 768px) {
     /* 1. Usunięcie sztywnych szerokości rozpychających ekran */
     html, body {
@@ -424,7 +445,7 @@
             <select id="source" name="Miejsce nagrania" required>
               <option value="" disabled selected hidden>Wybierz miejsce...</option>
               <option value="Drakiel Studio">Studio Drakiel</option>
-              <option value="Inne">Poza studiem / W domu</option>
+              <option value="Inne">Inne Studio / W domu</option>
             </select>
           </div>
           <div>
@@ -594,7 +615,6 @@
         });
     });
 
-    // JEDNA, POPRAWNA FUNKCJA PODSUMOWANIA
     function updateSummary() {
         let price = BASE_PRICE;
 
@@ -603,16 +623,28 @@
         const lengthPrice = lengthSelect.selectedIndex >= 0 ? parseInt(lengthSelect.options[lengthSelect.selectedIndex].dataset.price || 0) : 0;
         const stemsPrice = stemsSelect.selectedIndex >= 0 ? parseInt(stemsSelect.options[stemsSelect.selectedIndex].dataset.price || 0) : 0;
 
-        // POPRAWKA: Pobieranie ceny z AKTYWNEGO przycisku Express
         const activeExpressBtn = document.querySelector('#express-toggle .toggle-btn.active');
         const expressPrice = activeExpressBtn ? parseInt(activeExpressBtn.dataset.price || 0) : 0;
 
         price += qualityPrice + lengthPrice + stemsPrice + expressPrice;
 
-        // Aktualizacja wizualna prawej kolumny
+        // LOGIKA RABATU
+        let isDiscounted = (sourceSelect.value === 'Drakiel Studio');
+        if (isDiscounted) {
+            price = Math.round(price * 0.9);
+        }
+
+        // Aktualizacja wizualna
         sSong.textContent = songInput.value || '...';
         sRealizator.textContent = realizatorSelect.value || '–';
-        sSource.textContent = sourceSelect.value || '–';
+        
+        // MIEJSCE: Dodajemy zielony napis jeśli jest rabat
+        if (isDiscounted) {
+            sSource.innerHTML = `Drakiel Studio <span class="rabat-text pulse-green">RABAT -10%</span>`;
+        } else {
+            sSource.textContent = sourceSelect.value || '–';
+        }
+
         sLength.textContent = lengthSelect.value ? lengthSelect.options[lengthSelect.selectedIndex].text.split('(')[0] : '–';
         sStems.textContent = stemsSelect.value ? stemsSelect.options[stemsSelect.selectedIndex].text.split('(')[0] : '–';
         
@@ -622,11 +654,17 @@
             sExpress.textContent = expressHiddenInput.value === 'Tak' ? 'TAK (+100zł)' : 'Nie';
         }
 
-        sCena.textContent = price + ' zł';
+        // CENA: Dodajemy zielony dopisek obok kwoty
+        if (isDiscounted) {
+            sCena.innerHTML = `${price} zł <span class="rabat-text" style="font-size: 0.5em;">-10%!</span>`;
+        } else {
+            sCena.textContent = price + ' zł';
+        }
 
+        // Pasek mobilny
         const stickyVal = document.getElementById('sticky-sum-value');
         if (stickyVal) {
-            stickyVal.textContent = cena + " zł";
+            stickyVal.innerHTML = isDiscounted ? `${price} zł <span style="color:#2ecc71; font-size:12px;">-10%</span>` : `${price} zł`;
         }
     }
 
