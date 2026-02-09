@@ -714,9 +714,9 @@
     }
 
     .cennik {
-        min-width: 70vw !important;     /* Nieco węższe, bardziej jak na PC */
-        max-width: 80vw !important;
-        min-height: 450px !important;   /*Zredukowana wysokość */
+        min-width: 70vw ;     /* Nieco węższe, bardziej jak na PC */
+        max-width: 80vw ;
+        min-height: 450px ;   /*Zredukowana wysokość */
         max-height: 530px !important;
         flex-shrink: 0 !important;
         scroll-snap-align: center;
@@ -729,7 +729,7 @@
 
     /* Tytuł kafelka */
     .cennik p {
-        font-size: 35px !important;
+        font-size: 35px ;
         margin: 0 0 -5px 0 !important; /* Mały margines pod tytułem */
         line-height: 1.2 !important;
         font-weight: bold;
@@ -737,7 +737,7 @@
 
     /* Opis pod tytułem */
     .cennik p1 {
-        font-size: 10px !important;
+        font-size: 10px ;
         /* margin-top: 15px !important; Mały margines pod opisem */
         margin-top: 15px;
         margin-bottom: 20px !important;
@@ -773,9 +773,7 @@
     .cennik-price br {
         display: inline !important; /* Tu pozwalamy na <br> dla układu ceny */
     }
-}
 
-    /* Ujednolicenie rozmiaru środkowego kafelka */
     #most {
         transform: scale(1) !important; /* Usuwa ewentualne powiększenie */
         margin: 0 !important;           /* Resetuje marginesy, które mogły go wypychać */
@@ -796,6 +794,8 @@
         display: block !important;
         margin-bottom: 5px !important;
     }
+}
+
 
 
 @media (max-width: 768px) {
