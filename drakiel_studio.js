@@ -2,10 +2,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const miniHeader = document.getElementById('mini-header-mobile');
     const menuBtn = document.getElementById('mobile-menu-btn');
     const mobileNav = document.getElementById('mobile-nav-overlay');
+    const navLinks = document.querySelectorAll('.mobile-nav a');
 
-    // 1. Płynne pojawianie się mini-headera przy scrollu
+    // 1. POJAWIANIE SIĘ MINI-HEADERA PRZY SKROLOWANIU
     window.addEventListener('scroll', function() {
-        if (window.innerWidth <= 768) {
+        if (window.innerWidth <= 850) { // Dopasowane do Twojego media query
             if (window.scrollY > 80) {
                 miniHeader.classList.add('pokaz');
             } else {
@@ -14,9 +15,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 2. Obsługa kliknięcia w dwie kreski (Otwieranie menu)
+    // 2. OBSŁUGA OTWIERANIA I ZAMYKANIA (TOGGLE)
     if (menuBtn && mobileNav) {
         menuBtn.addEventListener('click', function() {
+            // Toggle dodaje klasę jeśli jej nie ma, lub usuwa jeśli jest
             menuBtn.classList.toggle('open');
             mobileNav.classList.toggle('active');
             
@@ -29,8 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 3. Zamykanie menu po kliknięciu w dowolny link
-    const navLinks = document.querySelectorAll('.mobile-nav a');
+    // 3. ZAMYKANIE MENU PO KLIKNIĘCIU W LINK
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
             menuBtn.classList.remove('open');

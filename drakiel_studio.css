@@ -382,7 +382,7 @@
       }
 
       .cennik {
-        background: #272727;
+        background: linear-gradient(#1a1a1a, #0d0d0d);
         position: relative;
         padding: 50px;
         height: 600px;
@@ -416,6 +416,7 @@
         font-size: 15px;
         font-family: 'centurygothic'  sans-serif !important;
         margin-top: 30px;
+        font-weight: normal;
       }
 
       .cennik-price{
@@ -463,7 +464,7 @@
         height: 650px;
         max-width: 450px;
         /* box-shadow: 0 0 50px rgba(255, 255, 255, 0.637); */
-        border: solid rgba(255, 0, 64, 0.596) 1px ;
+        border: solid rgba(255, 0, 64, 0.425) 1px ;
         box-shadow: 0 0 50px rgba(255, 0, 64, 0.452);
       }
 
@@ -716,10 +717,10 @@
         min-width: 70vw !important;     /* Nieco węższe, bardziej jak na PC */
         max-width: 80vw !important;
         min-height: 450px !important;   /*Zredukowana wysokość */
-        max-height: 520px !important;
+        max-height: 530px !important;
         flex-shrink: 0 !important;
         scroll-snap-align: center;
-        padding: 20px !important;       /* Mniejszy padding wewnętrzny */
+        padding: 25px !important;       /* Mniejszy padding wewnętrzny */
         display: flex !important;
         flex-direction: column !important;
         justify-content: flex-start !important; /* Treść trzyma się góry, nie rozlatuje się */
@@ -728,18 +729,20 @@
 
     /* Tytuł kafelka */
     .cennik p {
-        font-size: 25px !important;
-        margin: 0 0 10px 0 !important; /* Mały margines pod tytułem */
+        font-size: 35px !important;
+        margin: 0 0 -5px 0 !important; /* Mały margines pod tytułem */
         line-height: 1.2 !important;
         font-weight: bold;
     }
 
     /* Opis pod tytułem */
     .cennik p1 {
-        font-size: 13px !important;
+        font-size: 10px !important;
         /* margin-top: 15px !important; Mały margines pod opisem */
+        margin-top: 15px;
         margin-bottom: 20px !important;
         display: block !important;
+        font-weight: normal;
     }
 
     /* Lista zalet - usunięcie nadmiarowych przerw */
@@ -772,7 +775,6 @@
     }
 }
 
-@media (max-width: 768px) {
     /* Ujednolicenie rozmiaru środkowego kafelka */
     #most {
         transform: scale(1) !important; /* Usuwa ewentualne powiększenie */
@@ -794,7 +796,7 @@
         display: block !important;
         margin-bottom: 5px !important;
     }
-}
+
 
 @media (max-width: 768px) {
     /* Upewniamy się, że każdy duży kontener nie jest szerszy niż ekran */
@@ -931,7 +933,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 0 20px;
-        z-index: 9999;;
+        z-index: 10002;;
         opacity: 0;
         visibility: hidden;
         transition: 0.4s ease;
@@ -948,50 +950,54 @@
     }
 
     /* Hamburger: Dwie Kreski */
-    .hamburger-two {
-        width: 17px;
-        height: 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        cursor: pointer;
-        z-index: 10001;
-    }
+    /* Styl bazowy hamburgera */
+.hamburger-two {
+    width: 17px;
+    height: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    z-index: 10003; /* Musi być nad menu! */
+    position: relative;
+}
 
-    .hamburger-two span {
-        width: 100%;
-        height: 2px;
-        background: white;
-        transition: 0.3s ease-in-out;
-    }
+.hamburger-two span {
+    width: 100%;
+    height: 2px;
+    background: white;
+    transition: all 0.2s ease-in-out;
+}
 
-    /* Animacja X */
-    .hamburger-two.open span:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
-    }
-    .hamburger-two.open span:nth-child(2) {
-        transform: translateY(-8px) rotate(-45deg);
-    }
+/* Transformacja w "X" po dodaniu klasy .open */
+.hamburger-two.open span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
 
-    /* Full-screen Menu */
-    .mobile-nav {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 100%;
-        height: 100vh;
-        background: #0d0d0d;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 30px;
-        z-index: 10000;
-        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+.hamburger-two.open span:nth-child(2) {
+    transform: translateY(1px) rotate(-45deg);
+}
 
-    .mobile-nav.active {
-        right: 0;
-    }
+/* Upewnij się, że samo menu ma transition, żeby płynnie wjeżdżało */
+.mobile-nav {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Ukryte za ekranem */
+    width: 100%;
+    height: 100vh;
+    background: #0d0d0d;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10000;
+}
+
+.mobile-nav.active {
+    right: 0; /* Wjeżdża na ekran */
+}
 
     .mobile-nav a {
         color: white;
@@ -999,4 +1005,123 @@
         font-size: 24px;
         font-weight: bold;
     }
+}
+
+/* --- STYLIZACJA SUWAKA MOBILNEGO --- */
+@media (max-width: 768px) {
+    .slider-viewport {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        padding-bottom: 40px;
+    }
+
+
+    .cennik-container {
+        display: flex !important; /* Wymuszamy układ poziomy */
+        flex-direction: row !important;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 20px;
+        padding: 20px;
+        margin-bottom: 10px;
+        scroll-behavior: smooth;
+        scrollbar-width: none; /* Ukrywamy pasek przewijania */
+    }
+
+    .main::-webkit-scrollbar { display: none; }
+
+    .cennik {
+        min-width: 75vw; /* Pakiet zajmuje większość szerokości ekranu */
+        scroll-snap-align: center;
+        margin: 0 !important;
+        transition: transform 0.3s ease;
+    }
+
+    /* Strzałki */
+    .slider-arrow {
+        position: absolute;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.329);
+        backdrop-filter: blur(10px);
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        z-index: 10;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+    }
+    .prev { left: 50px; }
+    .next { right: 50px; }
+
+    /* Kropki / Podłużne kreski */
+    .slider-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 30px; /* Odstęp między strzałkami a kropkami */
+        margin-top: 20px;
+        margin-bottom: 100px;
+        padding-bottom: 20px;
+    }
+
+    /* Strzałki - teraz są elementami flex, nie absolutnymi */
+    .slider-arrow {
+        position: static; /* Wyłączamy top: 50% */
+        transform: none;  /* Wyłączamy centrowanie pionowe */
+        background: rgba(0, 0, 0, 0.329);
+        backdrop-filter: blur(10px);
+        border: 0px solid #333;
+        color: white;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .slider-arrow:active {
+        background: rgba(17, 17, 17, 0.329);
+        backdrop-filter: blur(10px);
+    }
+
+    /* Kropki i kreska */
+    .slider-dots {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+        background: #444;
+        border-radius: 10px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .dot.active {
+        width: 35px; /* "Podłużna kreska" */
+        background: var(--main-red, #ca0c2c);
+    }
+
+    /* Ukrywamy scrollbar, żeby nie psuł widoku */
+    .main {
+        scrollbar-width: none;
+    }
+    .main::-webkit-scrollbar {
+        display: none;
+    } }
+
+@media (min-width: 769px) {
+    .slider-arrow, .slider-dots { display: none; }
 }

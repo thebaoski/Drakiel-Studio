@@ -12,7 +12,7 @@
     :root {
       --main-red: #ca0c2c;
       --dark-bg: #1a1a1a;
-      --gray-bg: #2a2a2a;
+      --gray-bg: #1f1f1f;
       --text-white: #ffffff;
       --shadow: 0 0 25px rgba(0,0,0,.6);
     }
@@ -49,7 +49,7 @@
     }
 
     .form-card {
-      background: var(--dark-bg);
+      background: linear-gradient(#1a1a1a, #0d0d0d);
       border-radius: 14px;
       padding: 28px;
     }
@@ -68,7 +68,7 @@
       width: 100%;
       background: var(--gray-bg);
       color: var(--text-white);
-      border: 1px solid #383838;
+      border: 0px solid #3535357c;
       border-radius: 10px;
       padding: 12px 14px;
       font-size: 15px;
@@ -103,7 +103,8 @@
         select:focus, input:focus, textarea:focus {
         border-color: var(--main-red);
         box-shadow: 0 0 15px rgba(202, 12, 44, 0.4); /* Czerwony blask */
-        background-color: #333; /* Delikatne rozjaśnienie tła przy edycji */
+        border: 1px solid #3535357c;
+        background-color: #2c2c2c; /* Delikatne rozjaśnienie tła przy edycji */
     }
 
     select:disabled {
@@ -128,7 +129,7 @@
     /* Podsumowanie */
     .summary {
       position: sticky; top: 110px; align-self: start;
-      background: var(--dark-bg);
+      background: linear-gradient(#1a1a1a, #0f0f0f);
       border-radius: 16px; padding: 22px; box-shadow: var(--shadow);
     }
     .summary h3 { margin: 0 0 15px; text-align: center; color: var(--main-red); font-size: 24px; letter-spacing: .4px; font-family: 'Montserrat', sans-serif;}
