@@ -524,6 +524,119 @@
         animation: inherit;
       } */
 
+      /* NAWIGACJA (Glassmorphism + Logo po lewej) */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 56px;
+      background: var(--glass-bg);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      z-index: 9999;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-left img {
+      height: 32px;
+      width: auto;
+    }
+
+    .nav-left span {
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: 0.5px;
+      font-family: 'StretchPro', sans-serif !important;
+    }
+
+    @font-face {
+    font-family: 'StretchPro';
+    src: url('StretchPro.otf') format('opentype');
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links > li {
+      position: relative;
+      height: 56px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 400;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links > li:hover > a {
+      opacity: 1;
+    }
+
+    /* ROZWIJANE MENU "STUDIO" */
+    .dropdown-content {
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      top: 56px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: rgba(28, 28, 30, 0.85);
+      backdrop-filter: saturate(180%) blur(30px);
+      -webkit-backdrop-filter: saturate(180%) blur(30px);
+      min-width: 220px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 8px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nav-links > li.dropdown:hover .dropdown-content {
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(-50%) translateY(5px);
+    }
+
+    .dropdown-content a {
+      padding: 12px 16px;
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: 10px;
+      text-align: left;
+      opacity: 1;
+      transition: all 0.2s ease;
+    }
+
+    .dropdown-content a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--accent-color);
+    }
+
+
       /* Animacja gradientu */
     @keyframes goldFlow {
         0% {

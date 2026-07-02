@@ -1,141 +1,599 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Drakiel Studio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="drakiel_studio.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Drakiel Studio | Pro. W każdym detalu.</title>
   <link rel="icon" type="image/png" href="drakiel_logo.png"/>
+  <style>
+    /* APPLE DARK MODE x RED ACCENT */
+    :root {
+      --bg-color: #0d0d0d; 
+      --card-bg: #1c1c1e;
+      --card-hover: #2c2c2e;
+      
+      /* Twój dedykowany kolor czerwony */
+      --accent-color: #ca0c2c;
+      
+      /* Tekst */
+      --text-main: #f5f5f7;
+      --text-muted: #86868b;
+      
+      /* Szkło */
+      --glass-bg: rgba(13, 13, 13, 0.75);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.47059;
+      letter-spacing: -0.022em;
+      overflow-x: hidden;
+    }
+
+    /* NAWIGACJA (Glassmorphism + Logo po lewej) */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 56px;
+      background: var(--glass-bg);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      z-index: 9999;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-left img {
+      height: 32px;
+      width: auto;
+    }
+
+    .nav-left span {
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: 0.5px;
+      font-family: 'StretchPro', sans-serif !important;
+    }
+
+    @font-face {
+    font-family: 'StretchPro';
+    src: url('StretchPro.otf') format('opentype');
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links > li {
+      position: relative;
+      height: 56px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 400;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links > li:hover > a {
+      opacity: 1;
+    }
+
+    /* ROZWIJANE MENU "STUDIO" */
+    .dropdown-content {
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      top: 56px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: rgba(28, 28, 30, 0.85);
+      backdrop-filter: saturate(180%) blur(30px);
+      -webkit-backdrop-filter: saturate(180%) blur(30px);
+      min-width: 220px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 8px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nav-links > li.dropdown:hover .dropdown-content {
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(-50%) translateY(5px);
+    }
+
+    .dropdown-content a {
+      padding: 12px 16px;
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: 10px;
+      text-align: left;
+      opacity: 1;
+      transition: all 0.2s ease;
+    }
+
+    .dropdown-content a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--accent-color);
+    }
+
+    /* ------------------------------------------- */
+    /* SEKCJA HERO 100vh (Tytuł, podtytuł, przyciski i tło) */
+    /* ------------------------------------------- */
+    .hero-fullscreen {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 0 20px;
+    }
+
+    /* Animowany gradient w tle */
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .hero-bg-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      background: linear-gradient(-45deg, #0d0d0d, #200206, #0d0d0d, #26050b);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+    }
+
+    /* Zawartość nałożona na gradient */
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+    }
+
+    .hero-content h1 {
+      font-size: 80px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin-bottom: 24px;
+    }
+
+    .hero-content h2 {
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+    }
+
+    /* PRZYCISKI */
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .btn {
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 980px;
+      font-size: 17px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--text-main);
+      color: var(--bg-color);
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.02);
+      background-color: #fff;
+    }
+
+    .btn-secondary {
+      background-color: var(--card-bg);
+      color: var(--text-main);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--card-hover);
+    }
+
+    /* OGÓLNE USTAWIENIA SEKCJI (Zwiększyłem margin-top pierwszej sekcji dla oddechu po Hero) */
+    section {
+      max-width: 1000px;
+      margin: 100px auto 100px;
+      padding: 0 20px;
+    }
+
+    .section-title {
+      font-size: 44px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    /* KARTY */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 40px;
+      text-align: center;
+      transition: transform 0.3s ease, background 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      background: var(--card-hover);
+    }
+
+    .card h3 {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 17px;
+      margin-bottom: 30px;
+    }
+
+    .card-link {
+      color: var(--accent-color);
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 500;
+    }
+
+    .card-link::after {
+      content: ' ›';
+      font-size: 20px;
+    }
+
+    /* ZASADY SESJI */
+    .rules-container {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 50px;
+    }
+
+    .rule-item {
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .rule-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .rule-item:first-child {
+      padding-top: 0;
+    }
+
+    .rule-icon {
+      font-size: 24px;
+      color: var(--accent-color);
+    }
+
+    .rule-text h4 {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .rule-text p {
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+
+    /* PROCES MIXU */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .step-card {
+      /* background: var(--card-bg); */
+      border-radius: 20px;
+      padding: 30px 20px;
+      text-align: left;
+    }
+
+    .step-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-color);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .step-card h4 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .step-card p {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    /* SPRZĘT */
+    .gear-item {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 24px 30px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+
+    .gear-item:hover {
+      background: var(--card-hover);
+    }
+
+    .gear-item h4 {
+      font-size: 20px;
+    }
+
+    .gear-item span {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    /* RWD */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero-content h1 { font-size: 48px; }
+      .hero-content h2 { font-size: 21px; }
+      .cards-grid, .process-grid { grid-template-columns: 1fr; }
+      .btn-group { flex-direction: column; }
+      .rule-item { flex-direction: column; gap: 10px; }
+      .gear-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+  </style>
 </head>
 <body>
-  <div id="mini-header-mobile" class="mini-header mobile-only">
-    <img src="drakiel_logo.png" alt="Logo" class="mini-logo">
-    <div id="mobile-menu-btn" class="hamburger-two">
-        <span></span>
-        <span></span>
-          </div>
-      </div>
 
-      <div id="mobile-nav-overlay" class="mobile-nav mobile-only">
-          <a href="index.html">Studio</a>
-          <a href="mix.html">Mix&Mastering</a>
-          <a href="sesja.html">Sesja</a>
-          <a href="bup.html">Portfolio</a>
+  <!-- NAWIGACJA -->
+  <nav>
+    <a href="index.html" class="nav-left">
+      <img src="drakiel_logo.png" alt="Drakiel Logo">
+      <span>DDrakiel</span>
+    </a>
+    
+    <ul class="nav-links">
+      <li class="dropdown">
+        <a href="index.html">Studio</a>
+        <div class="dropdown-content">
+          <a href="#wybor">Nasze Usługi</a>
+          <a href="#zasady">Zasady Sesji</a>
+          <a href="#proces">Jak wygląda proces</a>
+          <a href="#sprzet">Zaplecze Sprzętowe</a>
+        </div>
+      </li>
+      <li><a href="mix.html">Mix&Mastering</a></li>
+      <li><a href="sesja.html">Sesja</a></li>
+      <li><a href="bup.html">Portfolio</a></li>
+    </ul>
+  </nav>
+
+  <!-- 1. FULLSCREEN HERO (Całość na jednym, pierwszym widoku z gradientem) -->
+  <header class="hero-fullscreen" id="hero">
+    <!-- Kontener na tło, gotowy na wideo lub obraz w przyszłości -->
+    <div class="hero-bg-container"></div>
+    
+    <!-- Kontener trzymający treść na wierzchu -->
+    <div class="hero-content">
+      <h1>Witaj! w Studiu Drakiel</h1>
+      <h2>Przestrzeń, w której Twoja wizja nabiera kształtu.<br>Czystość dźwięku stworzona z myślą o artystach.</h2>
+      <div class="btn-group">
+        <a href="#wybor" class="btn btn-primary">Rozpocznij</a>
+        <a href="#sprzet" class="btn btn-secondary">Odkryj sprzęt</a>
       </div>
-  <header>
-    <div class="logo-title">
-      <img src="drakiel_logo.png" alt="Drakiel Logo" />
-      <h1>DDrakiel</h1>
     </div>
-    <nav>
-      <a href="#studio">Studio</a>
-      <a href="mix.html">Mix&Mastering</a>
-      <a href="sesja.html">Sesja</a>
-      <a href="bup.html">Portfolio</a>
-    </nav>
   </header>
 
-  <section class="hero">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <h2 style="font-size: 2rem;">Witamy w Drakiel Studio</h2>
-      <div class="hero-buttons">
-        <button id="sesja-button">Zarezerwuj Sesję</button>
-        <button id="mix-button">Zamów Miks</button>
+  <!-- PRZEKIEROWANIE DO USŁUG -->
+  <section id="wybor">
+    <div class="cards-grid">
+      <div class="card">
+        <div>
+          <h3>Sesja Nagraniowa</h3>
+          <p>Wejdź do kabiny i skup się na emocjach. My zajmiemy się perfekcyjnym uchwyceniem każdego detalu Twojego wokalu.</p>
+        </div>
+        <a href="sesja.html" class="card-link">Zarezerwuj termin</a>
+      </div>
+      
+      <div class="card">
+        <div>
+          <h3>Mix & Mastering</h3>
+          <p>Przekształcamy surowe ślady w radiowe przeboje. Nadaj swoim utworom szerokość, głębię i potężne uderzenie.</p>
+        </div>
+        <a href="mix.html" class="card-link">Zamów wycenę mixu</a>
       </div>
     </div>
   </section>
-  <h3>Korzystaj z Studia!</h3>
-    <div class="selection2">
-      <div class="s-box2" id="s-box-1"><p>Nagrywanie Wokali</p><br>
-        <p1>Studio Drakiel to świetne miejsce aby nagrać twój wymarzony utwór. Otrzymasz tutaj wsparcie od doświadczonych realizoatorów, którzy będą cie wspierać w procesie twórczym. wwngiuwyugbwuyhgbwuydbguhwdbfywsguvbwuytgvytv fvybuiueybirgbuergigberuiybeguriybuiegruiybegrs</p1></div>
-      <div class="s-box2" id="s-box-2"><p>Mix&Mastering</p><br>
-        <p1>Studio Drakiel to świetne miejsce aby nagrać twój wymarzony utwór. Otrzymasz tutaj wsparcie od doświadczonych realizoatorów, którzy będą cie wspierać w procesie twórczym. gjndiugbewugiywebguywebgyuwbgyuwg rsthsr rt hrsh trsh rshrhrshahj </p1></div>
-      <div class="s-box2" id="s-box-3"><p>Przestrzeń Twórcza</p><br>
-        <p1>Studio Drakiel to świetne miejsce aby nagrać twój wymarzony utwór. Otrzymasz tutaj wsparcie od doświadczonych realizoatorów, którzy będą cie wspierać w procesie twórczym. bla bla bla bla bla bla bla blablasuiyhwefuy hjt jeaj earhjeah aeghe rt</p1></div>
-  </div>
 
-
-    <div class="main-content2">
-      <div class="content-side"></div>
-    </div>
-
-    <div class="main-content-title">Nasze Narzędzia</div>
-  <section class="main-content">
-    <div class="box">
-      Profesjonalne nagrania
-      <div class="hover-text">Nagrywaj jak zawodowiec</div>
-    </div>
-    <div class="box">
-      Nowoczesny sprzęt
-      <div class="hover-text">Technologia na najwyższym poziomie</div>
-    </div>
-    <div class="box">
-      Mix & Mastering
-      <div class="hover-text">Perfekcyjne brzmienie</div>
-    </div>
-    <div class="box">
-      Kreatywna przestrzeń
-      <div class="hover-text">Inspirująca atmosfera</div>
-    </div>
-    <div class="box">
-      Wsparcie techniczne
-      <div class="hover-text">Zawsze do dyspozycji</div>
-    </div>
-    <div class="box">
-      Komfort i prywatność
-      <div class="hover-text">Skup się na muzyce</div>
+  <!-- ZASADY SESJI -->
+  <section id="zasady">
+    <h2 class="section-title">Kultura pracy.</h2>
+    <div class="rules-container">
+      <div class="rule-item">
+        <div class="rule-icon">⏱</div>
+        <div class="rule-text">
+          <h4>Pełne godziny. Z marginesem dla Ciebie.</h4>
+          <p>Czas naliczany jest zegarowo. Po każdej godzinie otrzymujesz od nas do 10 minut za darmo na zgranie plików lub odpoczynek. Szanujemy Twój proces twórczy.</p>
+        </div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-icon">💳</div>
+        <div class="rule-text">
+          <h4>Przejrzyste płatności.</h4>
+          <p>Rozliczamy się bezpośrednio po zakończeniu sesji. Bez ukrytych kosztów, bez niespodzianek. Płacisz za czas spędzony przed mikrofonem.</p>
+        </div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-icon">🤫</div>
+        <div class="rule-text">
+          <h4>Strefa skupienia.</h4>
+          <p>Podczas nagrań na terenie studia obowiązuje bezwzględna cisza. Tworzymy środowisko, w którym artysta nie jest rozpraszany przez osoby z zewnątrz.</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- <h5>Zasady Sesji</h5> -->
-
-  <div class="rules-container">
-    <div class="rules">
-      <div class="rules-text">Zadady Sesji</div>
-      <ol>
-        <li><strong>Czas sesji naliczany jest w pełnych godzinach.</strong> Przykład: pobyt od 16:00 do 17:25 liczy się jako 2 godziny.</li>
-        <li><strong>Po każdej pełnej godzinie sesji przysługuje maksymalnie 10 minut dodatkowego czasu na zapisanie projektu lub krótkie konsultacje.</strong> <br>
-            Nie oznacza to przesunięcia rozliczenia – czas sesji liczony jest nadal w pełnych godzinach. Przykład: jeśli sesja trwa od 16:00 do 17:25,
-             naliczane są 2 godziny (druga godzina zaczyna się o 17:00, nie o 17:10).</li>
-        <li>Płatność następuje od razu po zakończeniu sesji <strong>lub zgodnie z wcześniejszymi ustaleniami.</strong></li>
-        <li><strong>Podczas nagrań obowiązuje cisza.</strong></li>
-        <li><strong>Po sesji należy zostawić porządek.</strong></li>
-      </ol>
+  <!-- PRZEBIEG WSPÓŁPRACY Z MIXOWANIEM -->
+  <section id="proces">
+    <h2 class="section-title">Proces. Krok po kroku.</h2>
+    <div class="process-grid">
+      <div class="step-card">
+        <span class="step-num">Krok 1</span>
+        <h4>Dostarczenie śladów</h4>
+        <p>Wysyłasz do nas paczkę ze stemami (WAV, 24-bit). Sprawdzamy je pod kątem fazy.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">Krok 2</span>
+        <h4>Wstępna wizja</h4>
+        <p>Ustalamy referencje. Mówisz nam, jakiego klimatu oczekujesz od gotowego utworu.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">Krok 3</span>
+        <h4>Pierwszy odsłuch</h4>
+        <p>Wysyłamy Ci gotowy mix v1. Słuchasz go na swoich ulubionych słuchawkach.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">Krok 4</span>
+        <h4>Finalny Master</h4>
+        <p>Wprowadzamy poprawki, nakładamy ostateczny szlif gotowy na Spotify.</p>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <h4>Zarezerwuj Sesje</h4>
+  <!-- SPRZĘT W STUDIU -->
+  <section id="sprzet">
+    <h2 class="section-title">Narzędzia. Najwyższa półka.</h2>
+    <p style="text-align: center; color: var(--text-muted); margin-bottom: 40px; font-size: 18px;">Używamy sprzętu, który stanowi standard w topowych studiach na świecie.</p>
+    
+    <div>
+      <div class="gear-item">
+        <h4>Neumann U87 Ai</h4>
+        <span>Mikrofon Główny</span>
+      </div>
+      <div class="gear-item">
+        <h4>Universal Audio Apollo x8</h4>
+        <span>Interfejs Audio</span>
+      </div>
+      <div class="gear-item">
+        <h4>Neve 1073 DPA</h4>
+        <span>Przedwzmacniacz</span>
+      </div>
+      <div class="gear-item">
+        <h4>Adam Audio S3H</h4>
+        <span>Monitory Odsłuchowe</span>
+      </div>
+    </div>
+  </section>
 
-  <div class="buy-s">
-    <a class="buy-s-box" href="sesja.html"></a>
-  </div>
+  <!-- FOOTER -->
+  <footer>
+    <p>Copyright © 2026 Drakiel Studio. Wszystkie prawa zastrzeżone.</p>
+    <p style="margin-top: 8px;">Designed with precision by INDRAS STUDIO®</p>
+  </footer>
 
-  <div class="fooder">
-  <div class="fooder-side left">
-    <img src="drakiel_logo.png" alt="Drakiel Logo Lewa" />
-  </div>
-
+  <script>
+    // Płynne przewijanie
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId !== '#') {
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerOffset = 70;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
   
-  <div class="fooder-text">
-    Drakiel to innowcja pozdro <br>
-    <p1>Created and designed by INDRAS STUDIO® for a special order by Drakiel®</p1>
-  </div>
-
-  <div class="fooder-side right">
-    <!-- Tu dodasz opcjonalnie inne logo -->
-     <img src="indras_logo.png" alt="Indras logo">
-  </div>
-
-  <script >
-    document.getElementById("sesja-button").onclick = function() {
-      window.location.href = "sesja.html";
-    };
-    document.getElementById("mix-button").onclick = function() {
-      window.location.href = "mix.html";
-    };
+                    window.scrollTo({
+                         top: offsetPosition,
+                         behavior: "smooth"
+                    });
+                }
+            }
+        });
+    });
   </script>
-  <script src="drakiel_studio.js"></script>
 </body>
 </html>
