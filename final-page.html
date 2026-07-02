@@ -214,32 +214,44 @@
 </head>
 
 <body>
+   <!-- NAV (Mobile: Dwie kreski + Logo) -->
   <div id="mini-header-mobile" class="mini-header mobile-only">
-    <img src="drakiel_logo.png" alt="Logo" class="mini-logo">
+    <a href="index.html"><img src="drakiel_logo.png" alt="Logo" class="mini-logo"></a>
     <div id="mobile-menu-btn" class="hamburger-two">
-        <span></span>
-        <span></span>
-          </div>
-      </div>
-
-      <div id="mobile-nav-overlay" class="mobile-nav mobile-only">
-          <a href="index.html">Studio</a>
-          <a href="mix.html">Mix&Mastering</a>
-          <a href="sesja.html">Sesja</a>
-          <a href="bup.html">Portfolio</a>
-      </div>
-  <header>
-    <div class="logo-title">
-      <img src="drakiel_logo.png" alt="Drakiel Logo" />
-      <h1>DDrakiel</h1>
+      <span></span>
+      <span></span>
     </div>
-    <nav>
-      <a href="index.html">Studio</a>
-      <a href="mix.html">Mix&Mastering</a>
-      <a href="sesja.html">Sesja</a>
-      <a href="bup.html">Portfolio</a>
-    </nav>
-  </header>
+  </div>
+
+  <!-- MENU OVERLAY (Mobilne) -->
+  <div id="mobile-nav-overlay" class="mobile-nav mobile-only">
+    <a href="index.html">Studio</a>
+    <a href="mix.html">Mix&Mastering</a>
+    <a href="sesja.html">Sesja</a>
+    <a href="bup.html">Portfolio</a>
+  </div>
+
+  <!-- NAV (Desktop - Glassmorphism) -->
+  <nav>
+    <a href="index.html" class="nav-left">
+      <img src="drakiel_logo.png" alt="Drakiel Logo">
+      <span>DDrakiel</span>
+    </a>
+    <ul class="nav-links">
+      <li class="dropdown">
+        <a href="index.html">Studio</a>
+        <div class="dropdown-content">
+          <a href="index.html#wybor">Nasze Usługi</a>
+          <a href="index.html#zasady">Zasady Sesji</a>
+          <a href="index.html#proces">Jak wygląda proces</a>
+          <a href="index.html#sprzet">Zaplecze Sprzętowe</a>
+        </div>
+      </li>
+      <li><a href="mix.html" style="color: var(--accent-color);">Mix&Mastering</a></li>
+      <li><a href="sesja.html">Sesja</a></li>
+      <li><a href="bup.html">Portfolio</a></li>
+    </ul>
+  </nav>
 
   <main class="page">
     <section class="form-card">
