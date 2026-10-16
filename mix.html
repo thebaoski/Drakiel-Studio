@@ -1,804 +1,1263 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Zamów Mix/Mastering - Drakiel Studio</title>
-  <link rel="stylesheet" href="drakiel_studio.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="drakiel_logo.png"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Mix & Mastering | DDrakiel Studio</title>
+  
+  <!-- Favicon z logo Drakiel -->
+  <link rel="icon" type="image/png" href="drakiel_logo.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <!-- EmailJS SDK do automatycznej wysyłki maili -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      emailjs.init("tWt8QZDq8L1Bhh1qF");
+    })();
+  </script>
+
   <style>
-    /* Style specyficzne dla tego formularza */
-    :root {
-      --main-red: #ca0c2c;
-      --dark-bg: #1a1a1a;
-      --gray-bg: #1f1f1f;
-      --text-white: #ffffff;
-      --shadow: 0 0 25px rgba(0,0,0,.6);
+    @font-face {
+      font-family: 'StretchPro';
+      src: url('StretchPro.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+      font-variant-ligatures: normal;
     }
 
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      padding: 20px 50px;
-      background: rgba(0, 0, 0, 0.329);
-      backdrop-filter: blur(10px);
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-family: 'Montserrat', sans-serif;
+    :root {
+      --bg-color: #0d0d0d;
+      --card-bg: #161618;
+      --card-bg-alt: #1c1c1e;
+      --card-hover: #222226;
+      
+      --accent-red: #ca0c2c;
+      --accent-red-hover: #e01235;
+      --accent-red-glow: rgba(202, 12, 44, 0.45);
+      --accent-green: #10b981;
+      --accent-green-glow: rgba(16, 185, 129, 0.3);
+      
+      --text-main: #f5f5f7;
+      --text-muted: #86868b;
+      --text-dark: #0d0d0d;
+      
+      --glass-bg: rgba(13, 13, 13, 0.82);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(202, 12, 44, 0.35);
+
+      --font-primary: 'Montserrat', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      --font-brand: 'StretchPro', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 70px;
     }
 
     body {
-      margin: 0;
-      background-color: #0d0d0d;
-      color: var(--text-white);
-      font-family: Inter, system-ui, sans-serif;
-      /* font-family: Century Gothic; */
+      font-family: var(--font-primary);
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+      letter-spacing: -0.015em;
+      overflow-x: hidden;
+      width: 100%;
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
-    .page {
-      display: grid;
-      grid-template-columns: minmax(0,1fr) 380px;
-      gap: 36px;
+    .container {
+      width: 100%;
       max-width: 1200px;
-      margin: 150px auto 80px;
+      margin: 0 auto;
       padding: 0 24px;
     }
 
-    .form-card {
-      background: linear-gradient(#1a1a1a, #0d0d0d);
-      border-radius: 14px;
-      padding: 28px;
-    }
-    .form-card h2 { margin: 0 0 20px; font-size: 28px; font-family: 'Montserrat', sans-serif; }
-    
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 18px 24px;
-      margin-bottom: 20px;
+    .brand-text {
+      font-family: var(--font-brand);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
     }
 
-    label { font-size: 14px; color: #ccc; display:block; margin-bottom:10px;}
-    
-    input[type="text"], input[type="email"], select, textarea {
+    .brand-span {
+      font-family: var(--font-brand);
+      letter-spacing: -0.04em;
+    }
+
+    h1, h2, h3, h4, h5 {
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* HEADER & NAVIGATION */
+    header.main-header {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      background: var(--gray-bg);
-      color: var(--text-white);
-      border: 0px solid #3535357c;
-      border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 15px;
-      outline: none;
-      transition: 0.3s;
+      height: 70px;
+      background: var(--glass-bg);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 1000;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Kolor placeholdera w selectach (gdy nic nie wybrano) */
-    select:invalid { color: #808080; }
-    select option { color: #ffffff; }
-
-    select option {
-        font-size: 16px;      
-        background: #2a2a2a;  
-        color: white;
-        margin-top: 20px;
-        padding: 25px;       
+    .nav-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
     }
 
-    /* Powiększenie samego klikalnego okienka i dodanie efektu Drakiel */
-    select {
-        cursor: pointer;
-        appearance: none;     /* Usuwa standardową strzałkę systemową */
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-        background-repeat: no-repeat;
-        background-position: right 20px center;
-        background-size: 18px;
-        padding-right: 50px !important; /* Miejsce na naszą nową strzałkę */
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
     }
 
-    /* EFEKT GLOW: Czerwona poświata po kliknięciu */
-        select:focus, input:focus, textarea:focus {
-        border-color: var(--main-red);
-        box-shadow: 0 0 15px rgba(202, 12, 44, 0.4); /* Czerwony blask */
-        border: 1px solid #3535357c;
-        background-color: #2c2c2c; /* Delikatne rozjaśnienie tła przy edycji */
+    .brand-logo-img {
+      height: 36px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 6px rgba(202, 12, 44, 0.4));
     }
 
-    select:disabled {
-      background: #1f1f1f;
-      color: #666;
-      border-color: #2a2a2a;
-      cursor: not-allowed;
-      font-style: italic;
+    .brand-logo .brand-text {
+      font-size: 1.15rem;
+      font-weight: 800;
+      line-height: 1;
     }
 
-    textarea { resize: vertical; min-height: 96px; }
-    input:focus, select:focus, textarea:focus { border-color: var(--main-red); box-shadow: 0 0 0 3px rgba(202,12,44,.15); }
-
-    .hint { font-size: 12px; color: #bdbdbd; font-style: italic; margin-top: 4px; }
-
-    p  {
-        font-family: Inter;
-        margin-top: -12px;
-        color:#686767 ;
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+      align-items: center;
     }
 
-    /* Podsumowanie */
-    .summary {
-      position: sticky; top: 110px; align-self: start;
-      background: linear-gradient(#1a1a1a, #0f0f0f);
-      border-radius: 16px; padding: 22px; box-shadow: var(--shadow);
-    }
-    .summary h3 { margin: 0 0 15px; text-align: center; color: var(--main-red); font-size: 24px; letter-spacing: .4px; font-family: 'centurygothic'; text-decoration: none;}
-    .summary .line { display:flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px none #353535; font-size: 14px; font-family: 'centurygothic'; letter-spacing: 0px;}
-    .summary .line:last-child { border-bottom: none; }
-    .summary .line strong { text-align: right; color: #eee; }
-    
-    #s-cena { color: var(--main-red); font-weight: 800; font-size: 24px; }
-
-    .submit-row { display:flex; gap: 12px; margin-top: 25px; }
-    .btn {
-      background: var(--main-red); color: #fff; border: none; border-radius: 10px; padding: 14px 16px; font-weight: 700; cursor: pointer; width: 100%;
-      transition: filter .2s ease;
-      font-size: 16px;
-    }
-    .btn:hover { filter: brightness(1.1); }
-
-    @media (max-width: 850px) {
-      .page { grid-template-columns: 1fr; }
-      .summary { position: static; margin-top: 20px; }
+    .nav-links > li {
+      position: relative;
+      height: 70px;
+      display: flex;
+      align-items: center;
     }
 
-    /* STYL MODALA */
-        .modal {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.85);
-        display: flex; align-items: center; justify-content: center;
-        z-index: 9999; opacity: 0; pointer-events: none; transition: 0.3s;
-        }
-        .modal.active { opacity: 1; pointer-events: all; }
-
-        .modal-content {
-        background: #1a1a1a; padding: 40px; border-radius: 20px;
-        max-width: 600px; width: 90%; border: 0px solid var(--main-red);
-        box-shadow: 0 0 30px rgba(202, 12, 44, 0.3);
-        }
-
-        .modal-content h2 { color: var(--main-red); margin-top: 0; font-family: 'Montserrat', sans-serif; }
-
-        #confirmText div {
-        padding: 12px 0; border-bottom: 1px solid #333;
-        display: flex; justify-content: space-between; font-size: 18px;
-        }
-
-        #confirmText strong { color: var(--main-red); }
-
-        .btn-ghost { background: #333 !important; color: #ccc !important; }
-
-        /* Kontener dla przycisków Tak/Nie */
-            .toggle-container {
-            display: flex;
-            gap: 15px;
-            margin-top: 5px;
-            }
-
-            .toggle-btn {
-            flex: 1;
-            background: var(--gray-bg);
-            border: 1px solid #1f1f1f;
-            color: #fff;
-            padding: 18px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            }
-
-            .toggle-btn:hover {
-            border-color: var(--main-red);
-            }
-
-            .toggle-btn.active {
-                background: var(--main-red) !important;
-                border-color: var(--main-red) !important;
-                box-shadow: 0 0 15px rgba(202, 12, 44, 0.4);
-                color: #fff;
-                }
-
-                /* Domyślny kolor znacznika ceny (czerwony) */
-            .price-tag {
-            color: var(--main-red);
-            transition: color 0.3s ease; /* Płynna zmiana koloru */
-            }
-
-            /* Kolor znacznika, GDY przycisk jest aktywny (czarny) */
-            .toggle-btn.active .price-tag {
-            color: #000000 !important; /* Zmieniamy na czarny, żeby kontrastował z czerwonym tłem */
-            }
-
-            .custom-upload {
-                width: 100%;
-                min-height: 96px; /* Taka sama wysokość jak textarea */
-                background: var(--gray-bg);
-                border: 1px solid #1f1f1f;
-                border-radius: 10px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                transition: 0.3s;
-                text-align: center;
-                padding: 20px;
-                box-sizing: border-box;
-            }
-
-            .custom-upload:hover {
-                border-color: var(--main-red);
-                background-color: #333;
-            }
-
-            .custom-upload img {
-                max-width: 40px; /* Rozmiar Twojej grafiki */
-                margin-bottom: 10px;
-                opacity: 0.7;
-            }
-
-            .custom-upload span {
-                font-family: 'centurygothic'  sans-serif !important;
-                font-size: 14px;
-                color: #ccc;
-            }
-
-            /* Styl po wybraniu pliku */
-            .custom-upload.file-selected {
-                border-color: #28a745; /* Zielony kolor po sukcesie */
-            }
-
-            .fooder-text {
-              text-align: center;
-              font-size: 20px;
-              flex: 1;
-            }
-
-            .fooder-text p1 {
-              font-size: 10px;
-              display: block;
-              margin-top: 5px;
-              font-family: 'centurygothic'  sans-serif !important;
-            }
-
-            .rabat-text {
-              color: #2ecc71; /* Przyjemny dla oka, "psychologiczny" zielony */
-              font-size: 0.8em;
-              font-weight: bold;
-              margin-left: 5px;
-              align-items: center;
-              text-transform: uppercase;
-              letter-spacing: 1px;
-          }
-
-          /* Animacja delikatnego pulsowania, żeby przyciągnąć wzrok do oszczędności */
-          .pulse-green {
-              animation: pulseGreen 2s infinite;
-          }
-
-        @keyframes pulseGreen {
-            0% { opacity: 1; }
-            50% { opacity: 0.6; }
-            100% { opacity: 1; }
-        }
-
-            @media (max-width: 768px) {
-    /* 1. Usunięcie sztywnych szerokości rozpychających ekran */
-    html, body {
-        overflow-x: hidden !important; /* Blokada przesuwania na boki */
-        width: 100% !important;
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      font-weight: 500;
+      opacity: 0.85;
+      transition: opacity 0.2s, color 0.2s;
     }
 
-    /* 2. Naprawa głównego kontenera - teraz będzie responsywny */
-    .page {
-        width: 100% !important;      /* Okienko zajmuje 92% szerokości ekranu */
-        max-width: none !important; /* Wyłączamy blokadę 600px */
-        margin: 150px auto 70px auto !important; /* Centrowanie i odstęp od góry */
-        padding: 5px !important;    /* Mniejszy padding, żeby było więcej miejsca na tekst */
-        float: none !important;
-        left: -450px !important;
+    .nav-links a:hover,
+    .nav-links > li:hover > a {
+      opacity: 1;
+      color: var(--accent-red);
+    }
+
+    /* Apple-Style Floating Mobile Dock */
+    .apple-floating-dock {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--glass-bg);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border: 1px solid rgb(31, 31, 31);
+      border-radius: 32px;
+      padding: 8px 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      z-index: 1005;
+      gap: 12px;
+      align-items: center;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .dock-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.6rem;
+      font-weight: 500;
+      gap: 3px;
+      transition: transform 0.2s ease, color 0.2s ease;
+      padding: 4px;
+    }
+
+    .dock-item svg, .dock-logo-img {
+      width: 20px;
+      height: 20px;
+      stroke: var(--text-main);
+      object-fit: contain;
+      transition: transform 0.2s ease, stroke 0.2s ease;
+    }
+
+    .dock-item:hover, .dock-item.active {
+      color: var(--accent-red);
+    }
+
+    .dock-item:hover svg, .dock-item.active svg,
+    .dock-item:hover .dock-logo-img, .dock-item.active .dock-logo-img {
+      stroke: var(--accent-red);
+      transform: scale(1.15);
+    }
+
+    @media (max-width: 768px) {
+      header.main-header {
+        background: linear-gradient(180deg, rgba(13, 13, 13, 0.95) 0%, rgba(13, 13, 13, 0) 100%);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: none;
+        transform: translateY(0);
+        opacity: 1;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+      }
+
+      header.main-header.mobile-hidden {
+        transform: translateY(-100%);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .nav-wrapper {
+        justify-content: center;
+      }
+
+      .nav-links {
+        display: none !important;
+      }
+
+      .apple-floating-dock {
+        display: flex;
+      }
+
+      .apple-floating-dock.dock-visible {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+
+    /* PAGE LAYOUT */
+    .page-header {
+      padding: 130px 0 30px 0;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    .mix-section {
+      padding: 10px 0 90px 0;
+    }
+
+    .mix-grid {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 30px;
+      align-items: start;
+    }
+
+    /* FORM STYLING & COMPACT DESIGN */
+    .mix-form-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 32px;
+    }
+
+    .form-section-title {
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-section-title svg {
+      stroke: var(--accent-red);
+      width: 18px;
+      height: 18px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
     }
 
     .form-group label {
-        font-size: 14px !important; /* Czytelniejsze etykiety */
-        margin-bottom: 8px !important;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-main);
     }
 
-    .form-group input, 
-    .form-group select, 
+    .form-group label svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--text-muted);
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group select,
     .form-group textarea {
-        width: 100% !important;
-        font-size: 16px !important; /* Zapobiega auto-zoomowaniu w iPhone'ach */
-        padding: 12px !important;
-        border-radius: 10px !important;
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      color: var(--text-main);
+      font-family: var(--font-primary);
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.2s;
     }
 
-    /* 4. Naprawa przycisku Express (Napis +100zł) */
-    .express-toggle {
-        display: flex !important;
-        align-items: center !important;
-        flex-wrap: wrap !important; /* W razie bardzo małych ekranów zawinie tekst */
-        gap: 10px !important;
-        margin: 20px 0 !important;
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent-red);
+      background: rgba(255, 255, 255, 0.06);
     }
 
-    .express-toggle span {
-        position: static !important; /* Wyciąga napis z pozycji absolutnej */
-        font-size: 14px !important;
-        margin: 0 !important;
+    .form-group select option {
+      background: #161618;
+      color: #f5f5f7;
     }
 
-    /* 5. Podsumowanie i przyciski na dole */
-    .summary {
-        padding: 15px !important;
-        border-radius: 12px !important;
+    /* TRYB EKSPRESOWY */
+    .express-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .express-btn-label {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid var(--border-subtle);
+      border-radius: 14px;
+      transition: all 0.25s ease;
+      text-align: center;
+      width: 100%;
+      height: 85px;
+    }
+
+    .express-btn-label span.title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+
+    .express-btn-label span.desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .express-btn-label span.express-extra {
+      font-size: 0.7rem;
+      color: var(--accent-red);
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .express-radio {
+      display: none;
+    }
+
+    .express-radio:checked + .express-btn-label {
+      border-color: var(--accent-red);
+      background: rgba(202, 12, 44, 0.12);
+      box-shadow: 0 0 15px rgba(202, 12, 44, 0.2);
+    }
+
+    /* FILE UPLOAD & DISABLED STATE */
+    .file-drop-area {
+      border: 2px dashed var(--border-subtle);
+      border-radius: 14px;
+      padding: 22px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.02);
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .file-drop-area:hover {
+      border-color: var(--accent-red);
+    }
+
+    .file-drop-area input {
+      display: none;
+    }
+
+    .disabled-group {
+      opacity: 0.35;
+      pointer-events: none;
+      filter: grayscale(90%);
+    }
+
+    /* SUMMARY SIDEBAR */
+    .summary-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-accent);
+      border-radius: 24px;
+      padding: 30px;
+      position: sticky;
+      top: 90px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .summary-title {
+      font-size: 1.2rem;
+      margin-bottom: 18px;
+      font-weight: 800;
     }
 
     .summary-item {
-        font-size: 13px !important; /* Mniejszy tekst podsumowania */
-        display: flex;
-        justify-content: space-between;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
     }
 
-    #sum-cena {
-        font-size: 22px !important; /* Podkreślenie ceny */
+    .summary-item span:last-child {
+      color: var(--text-main);
+      font-weight: 600;
+      text-align: right;
     }
 
-    .submit-btn {
-        width: 100% !important;
-        padding: 16px !important;
-        font-size: 18px !important;
-        border-radius: 12px !important;
+    .summary-divider {
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 14px 0;
     }
-    
-    /* 6. Naprawa modala potwierdzenia (żeby nie był ucięty) */
-    .modal-content {
-        width: 95% !important;
-        padding: 20px !important;
+
+    .discount-badge-container {
+      margin-top: 14px;
+      display: none;
+      justify-content: flex-end;
     }
-}
+
+    .discount-pill {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--accent-green);
+      color: var(--accent-green);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      box-shadow: 0 0 12px var(--accent-green-glow);
+    }
+
+    .summary-total {
+      margin-top: 10px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .summary-total span.label {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .summary-total span.price {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--accent-red);
+    }
+
+    .btn-submit {
+      width: 100%;
+      margin-top: 20px;
+      background-color: var(--accent-red);
+      color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      box-shadow: 0 4px 20px var(--accent-red-glow);
+    }
+
+    .btn-submit:hover {
+      background-color: var(--accent-red-hover);
+      transform: translateY(-2px);
+    }
+
+    /* MODAL POTWIERDZENIA */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 13, 13, 0.9);
+      backdrop-filter: blur(20px);
+      z-index: 4000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-accent);
+      border-radius: 28px;
+      padding: 40px;
+      width: 100%;
+      max-width: 550px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+      transform: translateY(20px);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0);
+    }
+
+    .modal-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .modal-card p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-details {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .modal-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .btn-modal-cancel {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      padding: 14px;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-modal-cancel:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      background: #080808;
+      padding: 60px 0 100px 0;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-brand p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 16px;
+      max-width: 320px;
+    }
+
+    .footer-col h5 {
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col a, .footer-col p {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover {
+      color: var(--accent-red);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    /* TOAST */
+    .toast-container {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 5000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast-msg {
+      background: rgba(22, 22, 24, 0.95);
+      border: 1px solid var(--border-accent);
+      color: var(--text-main);
+      padding: 16px 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      font-size: 0.95rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: auto;
+    }
+
+    .toast-msg.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 992px) {
+      .mix-grid {
+        grid-template-columns: 1fr;
+      }
+      .summary-card {
+        position: static;
+        margin-top: 24px;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .modal-buttons {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
-
 <body>
-      <div id="mini-header-mobile" class="mini-header mobile-only">
-    <img src="drakiel_logo.png" alt="Logo" class="mini-logo">
-    <div id="mobile-menu-btn" class="hamburger-two">
-        <span></span>
-        <span></span>
-          </div>
-      </div>
 
-      <div id="mobile-nav-overlay" class="mobile-nav mobile-only">
-          <a href="index.html">Studio</a>
-          <a href="mix.html">Mix&Mastering</a>
-          <a href="sesja.html">Sesja</a>
-          <a href="bup.html">Portfolio</a>
-      </div>
-  <nav>
-    <a href="index.html" class="nav-left">
-      <img src="drakiel_logo.png" alt="Drakiel Logo">
-      <span>DDrakiel</span>
+  <!-- HEADER -->
+  <header class="main-header" id="main-header">
+    <div class="container nav-wrapper">
+      <a href="ddrakiel_studio_landing_page_3.html" class="brand-logo">
+        <img src="drakiel_logo.png" alt="DDrakiel Studio Logo" class="brand-logo-img" onerror="this.onerror=null; this.src='https://placehold.co/100x100/ca0c2c/ffffff?text=D';">
+        <span class="brand-text">Drakiel</span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <ul class="nav-links">
+        <li><a href="index.html">Studio</a></li>
+        <li><a href="sesja.html">Sesja</a></li>
+        <li><a href="mix.html" style="color: var(--accent-red);">Mix & Mastering</a></li>
+        <li><a href="bup.html">Portfolio</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Apple-Style Floating Mobile Dock -->
+  <nav class="apple-floating-dock" id="floating-dock">
+    <a href="index.html" class="dock-item">
+      <img src="drakiel_logo.png" alt="Studio Logo" class="dock-logo-img" onerror="this.onerror=null; this.src='https://placehold.co/100x100/ffffff/000000?text=D';">
+      <span>Studio</span>
     </a>
-    
-    <ul class="nav-links">
-      <li class="dropdown">
-        <a href="index.html">Studio</a>
-        <div class="dropdown-content">
-          <a href="#wybor">Nasze Usługi</a>
-          <a href="#zasady">Zasady Sesji</a>
-          <a href="#proces">Jak wygląda proces</a>
-          <a href="#sprzet">Zaplecze Sprzętowe</a>
-        </div>
-      </li>
-      <li><a href="mix.html">Mix&Mastering</a></li>
-      <li><a href="sesja.html">Sesja</a></li>
-      <li><a href="bup.html">Portfolio</a></li>
-    </ul>
+    <a href="sesja.html" class="dock-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+      <span>Sesja</span>
+    </a>
+    <a href="mix.html" class="dock-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/></svg>
+      <span>Mix</span>
+    </a>
+    <a href="bup.html" class="dock-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 7.07 2.93"/><path d="M4.93 19.07A10 10 0 0 1 12 22"/></svg>
+      <span>Produkty</span>
+    </a>
+    <a href="#kontakt-footer" class="dock-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <span>Kontakt</span>
+    </a>
   </nav>
 
-  <main class="page">
-    <section class="form-card">
-      <h2>Konfiguracja Mix / Mastering</h2>
-      <p>czas realizacji do 14 dni</p>
-      <br>
-      <form id="form-mix" action="https://formsubmit.co/wytworniadrakiel.kontakt@gmail.com" method="POST" enctype="multipart/form-data">
-        <input type="hidden" id="hidden-price" name="Cena całkowita" value="150 zł">
-        <input type="hidden" name="total_price" id="total_price">
-        <input type="hidden" id="email-subject" name="_subject" value="Nowe zamówienie: MIX/MASTER" />
-        <input type="hidden" name="_captcha" value="false" />
-        <input type="hidden" name="_next" value="thanks.html" />
+  <div class="container">
+    <div class="page-header">
+      <h1 class="brand-text">Kreator <span class="brand-span">Mix & Mastering</span></h1>
+      <p>Skonfiguruj parametry utworu i wyślij zgłoszenie bezpośrednio do realizatora.</p>
+    </div>
 
-        <div class="form-grid">
-          <div>
-            <label for="name">Imię i nazwisko / Ksywa</label>
-            <input type="text" id="name" name="Klient" required placeholder="Np. Jan Kowalski" />
-          </div>
-          <div>
-            <label for="email">Adres e-mail</label>
-            <input type="email" id="email" name="Email" required placeholder="twoj@email.com" />
-          </div>
-        </div>
+    <section class="mix-section">
+      <form id="mix-form" onsubmit="openConfirmationModal(event)">
+        <div class="mix-grid">
+          
+          <!-- FORMULARZ -->
+          <div class="mix-form-card">
+            
+            <!-- Dane Klienta -->
+            <div class="form-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              1. Dane i Utwór
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="client-name">Imię i Nazwisko</label>
+                <input type="text" id="client-name" required placeholder="np. Jan Kowalski" oninput="calculatePrice()">
+              </div>
+              <div class="form-group">
+                <label for="client-email">Adres Email</label>
+                <input type="email" id="client-email" required placeholder="jan@domena.pl" oninput="calculatePrice()">
+              </div>
+            </div>
 
-        <hr style="border: 0; border-top: 1px solid #2a2a2a; margin: 20px 0;">
-
-        <div class="form-grid">
-          <div>
-            <label for="songName">Nazwa utworu</label>
-            <input type="text" id="songName" name="Nazwa utworu" required placeholder="Wpisz tytuł..." />
-          </div>
-          <div>
-            <label for="realizator">Wybór Realizatora</label>
-            <select id="realizator" name="Realizator" required>
-              <option value="" disabled selected hidden>Wybierz realizatora...</option>
-              <option value="Baoski">Baoski</option>
-              <option value="urwisekk">urwisekk</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-grid">
-          <div>
-            <label for="source">Gdzie nagrano utwór?</label>
-            <select id="source" name="Miejsce nagrania" required>
-              <option value="" disabled selected hidden>Wybierz miejsce...</option>
-              <option value="Drakiel Studio">Studio Drakiel</option>
-              <option value="Inne">Inne Studio / W domu</option>
-            </select>
-          </div>
-          <div>
-            <label for="quality">Jakość nagrania śladów</label>
-            <select id="quality" name="Jakość nagrania" required>
-                <option value="" disabled selected hidden data-price="0">Wybierz jakość...</option>
-                <option value="Studyjna" data-price="0">Studyjna (Profesjonalna)</option>
-                <option value="Domowa (z adaptacją)" data-price="30">Domowa z adaptacją akustyczną (+30zł)</option>
-                <option value="Domowa" data-price="50">Domowa bez adaptacji (+50zł)</option>
-                <option value="Studio Drakiel" disabled hidden data-price="0">Studio Drakiel (Wysoka)</option>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="song-title">Nazwa utworu</label>
+                <input type="text" id="song-title" required placeholder="np. Mój Nowy Hit" oninput="calculatePrice()">
+              </div>
+              <div class="form-group">
+                <label for="engineer-select">Wybierz realizatora</label>
+                <select id="engineer-select" required onchange="calculatePrice()">
+                  <option value="" disabled selected>Wybierz realizatora</option>
+                  <option value="Baoski">Baoski</option>
+                  <option value="urwisekk">urwisekk</option>
                 </select>
-            <div class="hint" id="quality-hint">Wybierz jakość dostarczanych plików.</div>
-          </div>
-        </div>
-
-        <div class="form-grid">
-          <div>
-            <label for="length">Długość utworu</label>
-            <select id="length" name="Długość utworu" required>
-              <option value="" disabled selected hidden data-price="0">Wybierz długość...</option>
-              <option value="do 3 min" data-price="0">Do 3 minut</option>
-              <option value="3-4 min" data-price="20">3 - 4 minuty (+20zł)</option>
-              <option value="powyżej 4 min" data-price="30">Powyżej 4 minut (+30zł)</option>
-            </select>
-          </div>
-          <div>
-            <label for="stems">Ilość ścieżek (stems)</label>
-            <select id="stems" name="Ilość ścieżek" required>
-              <option value="" disabled selected hidden data-price="0">Wybierz ilość...</option>
-              <option value="do 5" data-price="0">Do 5 ścieżek</option>
-              <option value="5-7" data-price="20">5 - 7 ścieżek (+20zł)</option>
-              <option value="powyżej 7" data-price="40">Powyżej 7 ścieżek (+40zł)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-grid">
-            <div>
-                <label style="color: #ca0c2c; font-weight: bold; font-size: 16px;">Tryb Ekspres (do 3 dni)</label>
-                <div class="toggle-container" id="express-toggle">
-                    <button type="button" class="toggle-btn" data-value="Nie" data-price="0">NIE</button>
-                    <button type="button" class="toggle-btn" data-value="Tak" data-price="100" style="position: relative;">
-                        TAK
-                        <span class="price-tag" style="position:absolute; top:35px; right:147px; font-size:10px; font-weight: bold; pointer-events:none;">+100zł</span>
-                    </button>
-                    </div>
-                <input type="hidden" id="express" name="Express" value="" required>
-            </div>
+              </div>
             </div>
 
-        <div style="margin-bottom: 20px;">
-            <label>Prześlij ślady (paczka .ZIP lub .RAR)</label>
+            <!-- Środowisko nagraniowe -->
+            <div class="form-section-title" style="margin-top: 24px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+              2. Środowisko i Jakość
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="recording-place">Gdzie nagrano utwór?</label>
+                <select id="recording-place" required onchange="handleRecordingPlaceChange()">
+                  <option value="" disabled selected>Wybierz miejsce nagrania</option>
+                  <option value="Studio Drakiel">Studio Drakiel (-10% zniżki!)</option>
+                  <option value="Inne studio / W domu">Inne studio / W domu</option>
+                </select>
+              </div>
+              
+              <div class="form-group" id="track-quality-group">
+                <label for="track-quality">Jakość śladów</label>
+                <select id="track-quality" required onchange="calculatePrice()">
+                  <option value="" disabled selected>Wybierz jakość śladów</option>
+                  <option value="Studyjna">Studyjna</option>
+                  <option value="Domowa z adaptacją akustyczną">Domowa z adaptacją akustyczną</option>
+                  <option value="Domowa bez adaptacji">Domowa bez adaptacji</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Parametry utworu -->
+            <div class="form-section-title" style="margin-top: 24px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              3. Parametry i Objętość
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="song-duration">Długość utworu</label>
+                <select id="song-duration" required onchange="calculatePrice()">
+                  <option value="" disabled selected>Wybierz długość</option>
+                  <option value="Do 3 minut">Do 3 minut</option>
+                  <option value="3-4 minuty">3-4 minuty</option>
+                  <option value="Powyżej 4 minut">Powyżej 4 minut</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="track-count">Ilość ścieżek</label>
+                <select id="track-count" required onchange="calculatePrice()">
+                  <option value="" disabled selected>Wybierz ilość ścieżek</option>
+                  <option value="Do 4 ścieżek">Do 4 ścieżek</option>
+                  <option value="5-7 ścieżek">5-7 ścieżek</option>
+                  <option value="Powyżej 7 ścieżek">Powyżej 7 ścieżek</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Tryb Ekspresowy -->
+            <div class="form-section-title" style="margin-top: 24px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              4. Tryb realizacji
+            </div>
+
+            <div class="express-options">
+              <div>
+                <input type="radio" id="express-no" name="express-mode" value="Nie" checked onchange="calculatePrice()" class="express-radio">
+                <label for="express-no" class="express-btn-label">
+                  <span class="title">Standard</span>
+                  <span class="desc">Standardowy czas</span>
+                </label>
+              </div>
+              <div>
+                <input type="radio" id="express-yes" name="express-mode" value="Tak" onchange="calculatePrice()" class="express-radio">
+                <label for="express-yes" class="express-btn-label">
+                  <span class="title">Tak</span>
+                  <span class="desc">Max 3 dni</span>
+                  <span class="express-extra">+100 zł</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Pliki i uwagi -->
+            <div class="form-section-title" style="margin-top: 24px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              5. Pliki i Wytyczne
+            </div>
+
+            <div class="form-group">
+              <label for="project-file">Plik projektu (.zip lub .rar) <span style="font-weight: 400; color: var(--text-muted);">(opcjonalnie do testu)</span></label>
+              <div class="file-drop-area" onclick="document.getElementById('project-file').click()">
+                <p id="file-label-text" style="font-size: 0.9rem; color: var(--text-muted);">Kliknij lub upuść archiwum ZIP / RAR</p>
+                <input type="file" id="project-file" accept=".zip,.rar" onchange="updateFileName(this)">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="client-notes">Indywidualne uwagi</label>
+              <textarea id="client-notes" rows="3" placeholder="Dodatkowe wytyczne, referencje..." oninput="sanitizeInput(this)"></textarea>
+            </div>
+
+          </div>
+
+          <!-- PODSUMOWANIE (BOCZNY PANEL) -->
+          <div class="summary-card">
+            <h3 class="summary-title">Podsumowanie</h3>
             
-            <div id="file-drop-zone" class="custom-upload">
-                <img src="upload-icon.png" alt="Upload Icon" id="upload-icon">
-                <span id="file-name-display">Kliknij, aby dodać pliki lub przeciągnij je tutaj</span>
+            <div class="summary-item">
+              <span>Imię i nazwisko:</span>
+              <span id="sum-name" style="color: var(--accent-red);">Wprowadź dane</span>
+            </div>
+            <div class="summary-item">
+              <span>Email:</span>
+              <span id="sum-email" style="color: var(--accent-red);">Wprowadź email</span>
+            </div>
+            <div class="summary-item">
+              <span>Nazwa utworu:</span>
+              <span id="sum-song" style="color: var(--accent-red);">Wpisz nazwę</span>
+            </div>
+            
+            <div class="summary-divider"></div>
+
+            <div class="summary-item">
+              <span>Realizator:</span>
+              <span id="sum-engineer" style="color: var(--accent-red);">Wybierz opcję</span>
+            </div>
+            <div class="summary-item">
+              <span>Miejsce nagrania:</span>
+              <span id="sum-place" style="color: var(--accent-red);">Wybierz opcję</span>
+            </div>
+            <div class="summary-item">
+              <span>Jakość śladów:</span>
+              <span id="sum-quality" style="color: var(--accent-red);">Wybierz opcję</span>
+            </div>
+            <div class="summary-item">
+              <span>Długość:</span>
+              <span id="sum-duration" style="color: var(--accent-red);">Wybierz opcję</span>
+            </div>
+            <div class="summary-item">
+              <span>Liczba ścieżek:</span>
+              <span id="sum-tracks" style="color: var(--accent-red);">Wybierz opcję</span>
+            </div>
+            <div class="summary-item">
+              <span>Tryb ekspresowy:</span>
+              <span id="sum-express">Nie</span>
             </div>
 
-            <input type="file" id="file-upload" name="Załącznik" accept=".zip,.rar,.7z" style="display: none;" />
-            
-            <p style="font-size: 12px; margin-top: 8px; color: #888;">Limit FormSubmit to 10MB. Większe paczki wyślij linkiem poniżej.</p>
-        </div>
+            <div class="discount-badge-container" id="sum-discount-badge">
+              <span class="discount-pill">-10% Zniżka Studio Drakiel</span>
+            </div>
 
-        <div style="margin-top: 15px;">
-          <label for="notes">Link do paczki ze śladami / Uwagi</label>
-          <textarea id="notes" name="Uwagi" placeholder="Wklej link do WeTransfer/Google Drive lub opisz swoje wizje co do miksu..."></textarea>
-        </div>
+            <div class="summary-total">
+              <span class="label">Suma:</span>
+              <span class="price" id="total-price">150 zł</span>
+            </div>
 
-        <div class="submit-row">
-          <button type="submit" class="btn">Przejdź do płatności / Wyślij</button>
+            <button type="submit" class="btn-submit">Wyślij zgłoszenie miksu</button>
+          </div>
+
         </div>
       </form>
-
     </section>
+  </div>
 
+  <!-- MODAL POTWIERDZENIA -->
+  <div class="modal-overlay" id="confirmation-modal">
+    <div class="modal-card">
+      <h3>Potwierdzenie zgłoszenia</h3>
+      <p class="subtitle">Sprawdź, czy wszystkie wybrane opcje i dane się zgadzają:</p>
+      
+      <div class="modal-details" id="modal-details-content"></div>
 
-    <aside class="summary">
-      <h3>Podsumowanie</h3>
-      <div class="line"><span>Utwór</span><strong id="s-song">...</strong></div>
-      <div class="line"><span>Realizator</span><strong id="s-realizator">–</strong></div>
-      <div class="line"><span>Nagrano w</span><strong id="s-source">–</strong></div>
-      <div class="line"><span>Czas trwania</span><strong id="s-length">–</strong></div>
-      <div class="line"><span>Ścieżki</span><strong id="s-stems">–</strong></div>
-      <div class="line"><span>Express</span><strong id="s-express">–</strong></div>
-      <div class="line" style="margin-top: 10px; padding-top: 15px; border-top: 1px solid #444;">
-        <span>Do zapłaty:</span>
-        <span id="s-cena">150 zł</span>
+      <div class="modal-buttons">
+        <button type="button" class="btn-modal-cancel" onclick="closeConfirmationModal()">Wróć do edycji</button>
+        <button type="button" class="btn-submit" style="margin-top: 0;" onclick="executeFinalSubmit()">Potwierdzam i wysyłam</button>
       </div>
-      <div class="hint" style="text-align: right; margin-top: 5px;">Cena zawiera podstawowy Mix & Master</div>
-    </aside>
-    
-  </main>
-
-  <div id="modal" class="modal">
-  <div class="modal-content">
-    <h2>Potwierdź zamówienie Mixu</h2>
-    <div id="confirmText">
-      </div>
-    <div class="submit-row" style="margin-top: 30px;">
-      <button type="button" class="btn btn-ghost" id="cancelConfirm">Wróć do edycji</button>
-      <button type="button" class="btn" id="acceptConfirm">Wyślij zamówienie</button>
     </div>
   </div>
-</div>
 
- <footer>
-    <p>Copyright © 2026 Drakiel Studio. Wszystkie prawa zastrzeżone.</p>
-    <p style="margin-top: 8px;">Designed with precision by INDRAS STUDIO®</p>
+  <!-- FOOTER -->
+  <footer id="kontakt-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="ddrakiel_studio_landing_page_3.html" class="brand-logo">
+            <img src="drakiel_logo.png" alt="DDrakiel Studio Logo" class="brand-logo-img" onerror="this.onerror=null; this.src='https://placehold.co/100x100/ca0c2c/ffffff?text=D';">
+            <span class="brand-text">Drakiel</span>
+          </a>
+          <p>Nowoczesna przestrzeń nagraniowa stworzona dla artystów ceniących czystość dźwięku i niezawodny proces twórczy.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Nawigacja</h5>
+          <ul>
+            <li><a href="ddrakiel_studio_landing_page_3.html">Strona Główna</a></li>
+            <li><a href="sesja.html">Sesja Nagraniowa</a></li>
+            <li><a href="mix.html">Mix & Mastering</a></li>
+            <li><a href="bup.html">Portfolio</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Lokalizacja & Kontakt</h5>
+          <p style="margin-bottom: 8px;">Ulica Bursztynowa XX, Warszawa</p>
+          <p style="margin-bottom: 8px;">Telefon: <a href="tel:+48123456789" style="color: var(--text-main); font-weight: 600;">+48 123 456 789</a></p>
+          <p>Email: <a href="mailto:wytworniadrakiel.kontakt@gmail.com">wytworniadrakiel.kontakt@gmail.com</a></p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Copyright © 2026 Drakiel. Wszystkie prawa zastrzeżone.</p>
+        <p>Designed with precision by INDRAS STUDIO®</p>
+      </div>
+    </div>
   </footer>
 
+  <div class="toast-container" id="toast-container"></div>
 
   <script>
-    const BASE_PRICE = 150; 
+    const BASE_PRICE = 150;
 
-    const form = document.getElementById('form-mix');
-    const sourceSelect = document.getElementById('source');
-    const qualitySelect = document.getElementById('quality');
-    const qualityHint = document.getElementById('quality-hint');
-    const lengthSelect = document.getElementById('length');
-    const stemsSelect = document.getElementById('stems');
-    const expressHiddenInput = document.getElementById('express');
-    const songInput = document.getElementById('songName');
-    const realizatorSelect = document.getElementById('realizator');
-    const fileInput = document.getElementById('file-upload');
-    const hiddenPriceInput = document.getElementById('hidden-price');
-    const emailSubjectInput = document.getElementById('email-subject');
+    function calculatePrice() {
+      let currentPrice = BASE_PRICE;
 
-    // Elementy podsumowania
-    const sSong = document.getElementById('s-song');
-    const sRealizator = document.getElementById('s-realizator');
-    const sSource = document.getElementById('s-source');
-    const sLength = document.getElementById('s-length');
-    const sStems = document.getElementById('s-stems');
-    const sExpress = document.getElementById('s-express');
-    const sCena = document.getElementById('s-cena');
+      const nameVal = document.getElementById('client-name').value.trim();
+      const emailVal = document.getElementById('client-email').value.trim();
+      const songVal = document.getElementById('song-title').value.trim();
 
-    function handleSourceChange() {
-        if (sourceSelect.value === 'Drakiel Studio') {
-            qualitySelect.value = 'Studio Drakiel'; 
-            qualitySelect.disabled = true; 
-            qualityHint.textContent = 'Jakość nagrania jest nam znana (nagrywane u nas).';
-        } else {
-            if (qualitySelect.value === 'Studio Drakiel') qualitySelect.value = "";
-            qualitySelect.disabled = false;
-            qualityHint.textContent = 'Wybierz jakość dostarczanych plików.';
-        }
-        updateSummary();
+      const place = document.getElementById('recording-place').value;
+      const quality = document.getElementById('track-quality').value;
+      const duration = document.getElementById('song-duration').value;
+      const tracks = document.getElementById('track-count').value;
+      const engineer = document.getElementById('engineer-select').value;
+
+      if (place === 'Inne studio / W domu') {
+        if (quality.includes('30zł') || quality.includes('adaptacją akustyczną')) currentPrice += 30;
+        if (quality.includes('50zł') || quality.includes('bez adaptacji')) currentPrice += 50;
+      }
+
+      if (duration === '3-4 minuty') currentPrice += 20;
+      if (duration === 'Powyżej 4 minut') currentPrice += 30;
+
+      if (tracks === '5-7 ścieżek') currentPrice += 20;
+      if (tracks === 'Powyżej 7 ścieżek') currentPrice += 40;
+
+      const isExpress = document.getElementById('express-yes').checked;
+      if (isExpress) currentPrice += 100;
+
+      let hasDiscount = false;
+      if (place === 'Studio Drakiel') {
+        currentPrice = currentPrice * 0.9;
+        hasDiscount = true;
+      }
+
+      const nameSpan = document.getElementById('sum-name');
+      nameSpan.textContent = nameVal || 'Wprowadź dane';
+      nameSpan.style.color = nameVal ? 'var(--text-main)' : 'var(--accent-red)';
+
+      const emailSpan = document.getElementById('sum-email');
+      emailSpan.textContent = emailVal || 'Wprowadź email';
+      emailSpan.style.color = emailVal ? 'var(--text-main)' : 'var(--accent-red)';
+
+      const songSpan = document.getElementById('sum-song');
+      songSpan.textContent = songVal || 'Wpisz nazwę';
+      songSpan.style.color = songVal ? 'var(--text-main)' : 'var(--accent-red)';
+
+      const engSpan = document.getElementById('sum-engineer');
+      engSpan.textContent = engineer || 'Wybierz opcję';
+      engSpan.style.color = engineer ? 'var(--text-main)' : 'var(--text-muted)';
+
+      const placeSpan = document.getElementById('sum-place');
+      placeSpan.textContent = place || 'Wybierz opcję';
+      placeSpan.style.color = place ? 'var(--text-main)' : 'var(--text-muted)';
+
+      const qualSpan = document.getElementById('sum-quality');
+      if (place === 'Studio Drakiel') {
+        qualSpan.textContent = 'Studio Drakiel';
+        qualSpan.style.color = 'var(--text-main)';
+      } else {
+        qualSpan.textContent = quality || 'Wybierz opcję';
+        qualSpan.style.color = quality ? 'var(--text-main)' : 'var(--text-muted)';
+      }
+
+      const durSpan = document.getElementById('sum-duration');
+      durSpan.textContent = duration || 'Wybierz opcję';
+      durSpan.style.color = duration ? 'var(--text-main)' : 'var(--text-muted)';
+
+      const trkSpan = document.getElementById('sum-tracks');
+      trkSpan.textContent = tracks || 'Wybierz opcję';
+      trkSpan.style.color = tracks ? 'var(--text-main)' : 'var(--text-muted)';
+
+      document.getElementById('sum-express').textContent = isExpress ? 'Tak' : 'Nie';
+
+      const discountBadge = document.getElementById('sum-discount-badge');
+      if (hasDiscount) {
+        discountBadge.style.display = 'flex';
+      } else {
+        discountBadge.style.display = 'none';
+      }
+
+      document.getElementById('total-price').textContent = Math.round(currentPrice) + ' zł';
     }
 
-    // Obsługa przycisków Express (Twój kod z poprawką czyszczenia klas)
-    const expressButtons = document.querySelectorAll('#express-toggle .toggle-btn');
-    expressButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            expressButtons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            expressHiddenInput.value = this.dataset.value;
-            updateSummary();
+    function handleRecordingPlaceChange() {
+      const place = document.getElementById('recording-place').value;
+      const qualityGroup = document.getElementById('track-quality-group');
+      const qualitySelect = document.getElementById('track-quality');
+
+      if (place === 'Studio Drakiel') {
+        qualityGroup.classList.add('disabled-group');
+        qualitySelect.disabled = true;
+        qualitySelect.required = false;
+      } else {
+        qualityGroup.classList.remove('disabled-group');
+        qualitySelect.disabled = false;
+        qualitySelect.required = true;
+      }
+      calculatePrice();
+    }
+
+    function updateFileName(input) {
+      const label = document.getElementById('file-label-text');
+      if (input.files && input.files[0]) {
+        label.textContent = "Wybrano: " + input.files[0].name;
+        label.style.color = "var(--text-main)";
+      }
+    }
+
+    function sanitizeInput(textarea) {
+      textarea.value = textarea.value.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+                                     .replace(/on\w+="[^"]*"/g, "");
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const mainHeader = document.getElementById('main-header');
+      const floatingDock = document.getElementById('floating-dock');
+
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.pageYOffset;
+        if (currentScrollY <= 100) {
+          mainHeader.classList.remove('mobile-hidden');
+          floatingDock.classList.remove('dock-visible');
+        } else {
+          mainHeader.classList.add('mobile-hidden');
+          floatingDock.classList.add('dock-visible');
+        }
+      });
+
+      calculatePrice();
+    });
+
+    function openConfirmationModal(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('client-name').value;
+      const email = document.getElementById('client-email').value;
+      const song = document.getElementById('song-title').value;
+      const engineer = document.getElementById('engineer-select').value;
+      const place = document.getElementById('recording-place').value;
+      const quality = place === 'Studio Drakiel' ? 'Studio Drakiel' : document.getElementById('track-quality').value;
+      const duration = document.getElementById('song-duration').value;
+      const tracks = document.getElementById('track-count').value;
+      const express = document.getElementById('express-yes').checked ? 'Tak (+100 zł)' : 'Nie';
+      const fileInput = document.getElementById('project-file');
+      const fileName = fileInput.files[0] ? fileInput.files[0].name : 'Brak pliku';
+      const notes = document.getElementById('client-notes').value || 'Brak uwag';
+      const total = document.getElementById('total-price').textContent;
+
+      const detailsHtml = `
+        <div style="font-size: 0.9rem; line-height: 1.6; display: flex; flex-direction: column; gap: 6px;">
+          <div><strong>Imię i nazwisko:</strong> ${name}</div>
+          <div><strong>Email:</strong> ${email}</div>
+          <div><strong>Nazwa utworu:</strong> ${song}</div>
+          <div><strong>Realizator:</strong> ${engineer}</div>
+          <div><strong>Miejsce nagrania:</strong> ${place}</div>
+          <div><strong>Jakość śladów:</strong> ${quality}</div>
+          <div><strong>Długość:</strong> ${duration}</div>
+          <div><strong>Ilość ścieżek:</strong> ${tracks}</div>
+          <div><strong>Tryb ekspresowy:</strong> ${express}</div>
+          <div><strong>Plik projektu:</strong> ${fileName}</div>
+          <div><strong>Uwagi:</strong> ${notes}</div>
+          <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-subtle); font-size: 1.1rem; color: var(--accent-red);"><strong>Łączna cena:</strong> ${total}</div>
+        </div>
+      `;
+
+      document.getElementById('modal-details-content').innerHTML = detailsHtml;
+      document.getElementById('confirmation-modal').classList.add('active');
+    }
+
+    function closeConfirmationModal() {
+      document.getElementById('confirmation-modal').classList.remove('active');
+    }
+
+    function executeFinalSubmit() {
+      closeConfirmationModal();
+
+      const templateParams = {
+        to_email: "wytworniadrakiel.kontakt@gmail.com",
+        client_name: document.getElementById('client-name').value,
+        client_email: document.getElementById('client-email').value,
+        song_title: document.getElementById('song-title').value,
+        engineer: document.getElementById('engineer-select').value,
+        recording_place: document.getElementById('recording-place').value,
+        track_quality: document.getElementById('recording-place').value === 'Studio Drakiel' ? 'Studio Drakiel' : document.getElementById('track-quality').value,
+        song_duration: document.getElementById('song-duration').value,
+        track_count: document.getElementById('track-count').value,
+        express_mode: document.getElementById('express-yes').checked ? 'Tak' : 'Nie',
+        client_notes: document.getElementById('client-notes').value || 'Brak',
+        total_price: document.getElementById('total-price').textContent
+      };
+
+      showToast("Wysyłanie zgłoszenia trwa...");
+
+      emailjs.send("service_cg6w9p7", "template_f618cds", templateParams)
+        .then(function(response) {
+           showToast("Sukces! Przekierowywanie...");
+           console.log("SUCCESS!", response.status, response.text);
+           
+           setTimeout(() => {
+             window.location.href = "thanks.html";
+           }, 1200);
+
+        }, function(error) {
+           showToast("Błąd! Sprawdź konsolę przeglądarki (F12).");
+           console.error("EMAILJS FAILED...", error);
+           alert("Błąd wysyłki EmailJS: " + JSON.stringify(error));
         });
-    });
-
-    function updateSummary() {
-        let price = BASE_PRICE;
-
-        // Ceny z list rozwijanych
-        const qualityPrice = qualitySelect.selectedIndex >= 0 ? parseInt(qualitySelect.options[qualitySelect.selectedIndex].dataset.price || 0) : 0;
-        const lengthPrice = lengthSelect.selectedIndex >= 0 ? parseInt(lengthSelect.options[lengthSelect.selectedIndex].dataset.price || 0) : 0;
-        const stemsPrice = stemsSelect.selectedIndex >= 0 ? parseInt(stemsSelect.options[stemsSelect.selectedIndex].dataset.price || 0) : 0;
-
-        const activeExpressBtn = document.querySelector('#express-toggle .toggle-btn.active');
-        const expressPrice = activeExpressBtn ? parseInt(activeExpressBtn.dataset.price || 0) : 0;
-
-        price += qualityPrice + lengthPrice + stemsPrice + expressPrice;
-
-        // LOGIKA RABATU
-        let isDiscounted = (sourceSelect.value === 'Drakiel Studio');
-        if (isDiscounted) {
-            price = Math.round(price * 0.9);
-        }
-
-        // Aktualizacja wizualna
-        sSong.textContent = songInput.value || '...';
-        sRealizator.textContent = realizatorSelect.value || '–';
-        
-        // MIEJSCE: Dodajemy zielony napis jeśli jest rabat
-        if (isDiscounted) {
-            sSource.innerHTML = `Drakiel Studio <span class="rabat-text pulse-green">RABAT -10%</span>`;
-        } else {
-            sSource.textContent = sourceSelect.value || '–';
-        }
-
-        sLength.textContent = lengthSelect.value ? lengthSelect.options[lengthSelect.selectedIndex].text.split('(')[0] : '–';
-        sStems.textContent = stemsSelect.value ? stemsSelect.options[stemsSelect.selectedIndex].text.split('(')[0] : '–';
-        
-        if (!expressHiddenInput.value) {
-            sExpress.textContent = '–';
-        } else {
-            sExpress.textContent = expressHiddenInput.value === 'Tak' ? 'TAK (+100zł)' : 'Nie';
-        }
-
-        // CENA: Dodajemy zielony dopisek obok kwoty
-        if (isDiscounted) {
-            sCena.innerHTML = `${price} zł <span class="rabat-text" style="font-size: 0.5em;">-10%!</span>`;
-        } else {
-            sCena.textContent = price + ' zł';
-        }
-
-        // Pasek mobilny
-        const stickyVal = document.getElementById('sticky-sum-value');
-        if (stickyVal) {
-            stickyVal.innerHTML = isDiscounted ? `${price} zł <span style="color:#2ecc71; font-size:12px;">-10%</span>` : `${price} zł`;
-        }
     }
 
-    const dropZone = document.getElementById('file-drop-zone');
-const realFileInput = document.getElementById('file-upload');
-const fileNameDisplay = document.getElementById('file-name-display');
+    window.showToast = function(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast-msg';
+      toast.textContent = message;
+      container.appendChild(toast);
 
-// Kliknięcie w duży obszar wywołuje kliknięcie w ukryty input
-dropZone.addEventListener('click', () => realFileInput.click());
-
-// Zmiana tekstu po wybraniu pliku
-realFileInput.addEventListener('change', function() {
-    if (this.files && this.files.length > 0) {
-        const name = this.files[0].name;
-        fileNameDisplay.textContent = "Wybrano: " + name;
-        dropZone.classList.add('file-selected');
-        fileNameDisplay.style.color = "#fff";
-    } else {
-        fileNameDisplay.textContent = "Kliknij, aby dodać pliki lub przeciągnij je tutaj";
-        dropZone.classList.remove('file-selected');
-    }
-});
-
-// Opcjonalnie: Obsługa przeciągania (drag & drop)
-dropZone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    dropZone.style.borderColor = "var(--main-red)";
-});
-
-dropZone.addEventListener('dragleave', () => {
-    dropZone.style.borderColor = "#383838";
-});
-
-dropZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    realFileInput.files = e.dataTransfer.files;
-    // Wywołaj ręcznie zdarzenie zmiany, żeby zaktualizować tekst
-    realFileInput.dispatchEvent(new Event('change'));
-});
-
-    // Event Listenery
-    sourceSelect.addEventListener('change', handleSourceChange);
-    [songInput, realizatorSelect, qualitySelect, lengthSelect, stemsSelect].forEach(el => {
-        el.addEventListener('input', updateSummary);
-        el.addEventListener('change', updateSummary);
-    });
-
-    // Modal
-    const modal = document.getElementById('modal');
-    const confirmText = document.getElementById('confirmText');
-    const acceptConfirm = document.getElementById('acceptConfirm');
-    const cancelConfirm = document.getElementById('cancelConfirm');
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        let fileStatus = fileInput.files.length > 0 ? "Załączono plik" : "Brak pliku (sprawdź uwagi)";
-
-        confirmText.innerHTML = `
-            <div><span>Utwór:</span> <strong>${songInput.value}</strong></div>
-            <div><span>Realizator:</span> <strong>${realizatorSelect.value}</strong></div>
-            <div><span>Miejsce:</span> <strong>${sourceSelect.value}</strong></div>
-            <div><span>Jakość:</span> <strong>${qualitySelect.value}</strong></div>
-            <div><span>Pliki:</span> <strong>${fileStatus}</strong></div>
-            <div><span>Express:</span> <strong>${expressHiddenInput.value || 'Nie'}</strong></div>
-            <div style="border:none; margin-top:15px; font-size: 22px;"><span>Suma:</span> <strong>${sCena.textContent}</strong></div>
-        `;
-        modal.classList.add('active');
-    });
-
-    cancelConfirm.addEventListener('click', () => modal.classList.remove('active'));
-    
-        acceptConfirm.addEventListener('click', () => {
-        modal.classList.remove('active');
-
-        // To pole musi mieć pełny adres URL Twojej strony
-        // Jeśli Twoja strona to np. drakielstudio.pl, wpisz to tutaj:
-        const nextInput = form.querySelector('input[name="_next"]');
-        
-        // Automatyczne wykrywanie adresu (zadziała po wrzuceniu na hosting)
-        nextInput.value = window.location.origin + "/thanks.html"; 
-
-        form.submit(); 
-    });
-
-    // Start
-    updateSummary();
-
-    // 1. Znajdź elementy
-    const mainPriceDisplay = document.getElementById('sum-cena');
-    const stickyPriceDisplay = document.getElementById('sticky-sum-value');
-    const stickyBarContainer = document.getElementById('sticky-price-bar');
-    const summarySection = document.querySelector('.summary');
-
-    // 2. Funkcja synchronizująca ceny
-    function syncPrices() {
-        if (mainPriceDisplay && stickyPriceDisplay) {
-            stickyPriceDisplay.innerText = mainPriceDisplay.innerText;
-        }
-    }
-
-    // 3. Obserwator zmian (MutationObserver) - reaguje na każdą zmianę tekstu w sumie
-    const priceObserver = new MutationObserver(() => {
-        syncPrices();
-    });
-
-    if (mainPriceDisplay) {
-        priceObserver.observe(mainPriceDisplay, { 
-            childList: true, 
-            characterData: true, 
-            subtree: true 
-        });
-        // Uruchom raz na starcie
-        syncPrices();
-    }
-
-    // 4. Logika chowania paska, gdy użytkownik dotrze do pełnego podsumowania
-    window.addEventListener('scroll', () => {
-        if (!summarySection || !stickyBarContainer) return;
-
-        const rect = summarySection.getBoundingClientRect();
-        // Jeśli górna krawędź sekcji .summary wejdzie w widok ekranu
-        if (rect.top <= window.innerHeight) {
-            stickyBarContainer.style.opacity = "0";
-            stickyBarContainer.style.visibility = "hidden";
-            stickyBarContainer.style.pointerEvents = "none";
-        } else {
-            stickyBarContainer.style.opacity = "1";
-            stickyBarContainer.style.visibility = "visible";
-            stickyBarContainer.style.pointerEvents = "auto";
-        }
-});
-</script>
-<script src="drakiel_studio.js"></script>
+      setTimeout(() => { toast.classList.add('show'); }, 50);
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => { toast.remove(); }, 300);
+      }, 4500);
+    };
+  </script>
 </body>
 </html>
