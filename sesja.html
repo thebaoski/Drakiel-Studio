@@ -1,182 +1,720 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wybierz Pakiet Sesji - Drakiel Studio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="drakiel_studio.css">
-  <link rel="icon" type="image/png" href="drakiel_logo.png"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Wybierz Pakiet Sesji | DDrakiel Studio</title>
+  
+  <!-- Favicon z logo Drakiel -->
+  <link rel="icon" type="image/png" href="drakiel_logo.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
   <style>
+    @font-face {
+      font-family: 'StretchPro';
+      src: url('StretchPro.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+      font-variant-ligatures: normal;
+    }
+
+    :root {
+      --bg-color: #0d0d0d;
+      --card-bg: #161618;
+      --card-bg-alt: #1c1c1e;
+      --card-hover: #222226;
+      
+      --accent-red: #ca0c2c;
+      --accent-red-hover: #e01235;
+      --accent-red-glow: rgba(202, 12, 44, 0.45);
+      --accent-green: #10b981;
+      
+      --text-main: #f5f5f7;
+      --text-muted: #86868b;
+      
+      --glass-bg: rgba(13, 13, 13, 0.82);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(202, 12, 44, 0.35);
+
+      --font-primary: 'Montserrat', -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      --font-brand: 'StretchPro', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 70px;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+      letter-spacing: -0.015em;
+      overflow-x: hidden;
+      width: 100%;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .brand-text {
+      font-family: var(--font-brand);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .brand-span {
+      font-family: var(--font-brand);
+      letter-spacing: -0.04em;
+    }
+
+    /* HEADER & NAVIGATION */
+    header.main-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: var(--glass-bg);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 1000;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-logo-img {
+      height: 36px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 6px rgba(202, 12, 44, 0.4));
+    }
+
+    .brand-logo .brand-text {
+      font-size: 1.15rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      font-weight: 500;
+      opacity: 0.85;
+      transition: opacity 0.2s, color 0.2s;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+      color: var(--accent-red);
+    }
+
+    /* Apple-Style Floating Mobile Dock */
+    .apple-floating-dock {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--glass-bg);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border: 1px solid rgb(31, 31, 31);
+      border-radius: 32px;
+      padding: 8px 18px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      z-index: 1005;
+      gap: 16px;
+      align-items: center;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .dock-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 0.65rem;
+      font-weight: 500;
+      gap: 3px;
+      transition: transform 0.2s ease, color 0.2s ease;
+      padding: 4px;
+    }
+
+    .dock-item svg, .dock-logo-img {
+      width: 22px;
+      height: 22px;
+      stroke: var(--text-main);
+      object-fit: contain;
+      transition: transform 0.2s ease, stroke 0.2s ease;
+    }
+
+    .dock-item:hover svg, .dock-item.active svg,
+    .dock-item:hover .dock-logo-img, .dock-item.active .dock-logo-img {
+      stroke: var(--accent-red);
+      transform: scale(1.15);
+    }
+
+    @media (max-width: 768px) {
+      header.main-header {
+        background: linear-gradient(180deg, rgba(13, 13, 13, 0.95) 0%, rgba(13, 13, 13, 0) 100%);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: none;
+        transform: translateY(0);
+        opacity: 1;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+      }
+
+      header.main-header.mobile-hidden {
+        transform: translateY(-100%);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .nav-wrapper {
+        justify-content: center;
+      }
+
+      .nav-links {
+        display: none !important;
+      }
+
+      .apple-floating-dock {
+        display: flex;
+      }
+
+      .apple-floating-dock.dock-visible {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+
+    /* PAGE LAYOUT & PRICING CARDS */
+    .page-header {
+      padding: 130px 0 20px 0;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    .slider-viewport {
+      padding: 20px 0 60px 0;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .cennik-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 24px;
+      flex-wrap: wrap;
+    }
+
     .cennik {
+      flex: 1 1 340px;
+      max-width: 380px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 36px 30px;
       cursor: pointer;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .cennik:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent-red);
+      box-shadow: 0 20px 40px rgba(202, 12, 44, 0.15);
+    }
+
+    .cennik#most {
+      border-color: var(--border-accent);
+      background: linear-gradient(145deg, var(--card-bg) 0%, rgba(202, 12, 44, 0.05) 100%);
+    }
+
+    .cennik#premium {
+      border-color: rgba(202, 12, 44, 0.6);
+      background: linear-gradient(145deg, var(--card-bg) 0%, rgba(202, 12, 44, 0.12) 100%);
+      box-shadow: 0 10px 30px rgba(202, 12, 44, 0.2);
+    }
+
+    /* Tytuły pakietów - Wyraźny StretchPro */
+    .cennik p1 {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      display: block;
+      line-height: 1.5;
+    }
+
+    .cennik p {
+      font-size: 1.8rem;
+      font-family: StretchPro;
+      margin-bottom: 3px;
+    }
+
+    .cennik ul {
+      list-style: none;
+      margin-bottom: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cennik ul li {
+      font-size: 0.88rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cennik ul li::before {
+      content: "✓";
+      color: var(--accent-red);
+      font-weight: bold;
+    }
+
+    .cennik-price {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 20px;
+      margin-top: auto;
+      text-align: right;
+    }
+
+    .cennik-price p3 {
+      display: inline-block;
+      background: var(--accent-red);
+      color: #fff;
+      padding: 9px 22px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 15px var(--accent-red-glow);
+      float: left;
+      transition: background 0.2s;
+    }
+
+    .cennik:hover .cennik-price p3 {
+      background: var(--accent-red-hover);
+    }
+
+    .cennik-price p2 {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--accent-red);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .cennik-price span {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    /* Slider Controls - Widoczne TYLKO na urządzeniach mobilnych */
+    .slider-controls {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-top: 10px;
+      margin-bottom: 60px;
+    }
+
+    .slider-arrow {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .slider-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border-subtle);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .dot.active {
+      background: var(--accent-red);
+      transform: scale(1.2);
+    }
+
+    @media (max-width: 1024px) {
+      .cennik-container {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        justify-content: flex-start;
+        scrollbar-width: none;
+        padding: 20px 24px;
+      }
+      .cennik-container::-webkit-scrollbar {
+        display: none;
+      }
+      .cennik {
+        flex: 0 0 85vw;
+        max-width: none;
+        scroll-snap-align: center;
+      }
+      .slider-controls {
+        display: flex;
+      }
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      background: #080808;
+      padding: 60px 0 100px 0;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-brand p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 16px;
+      max-width: 320px;
+    }
+
+    .footer-col h5 {
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col a, .footer-col p {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover {
+      color: var(--accent-red);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    @media (max-width: 992px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-   <!-- NAV (Mobile: Dwie kreski + Logo) -->
-  <div id="mini-header-mobile" class="mini-header mobile-only">
-    <a href="index.html"><img src="drakiel_logo.png" alt="Logo" class="mini-logo"></a>
-    <div id="mobile-menu-btn" class="hamburger-two">
-      <span></span>
-      <span></span>
+
+  <!-- HEADER -->
+  <header class="main-header" id="main-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo">
+        <img src="drakiel_logo.png" alt="DDrakiel Studio Logo" class="brand-logo-img" onerror="this.onerror=null; this.src='https://placehold.co/100x100/ca0c2c/ffffff?text=D';">
+        <span class="brand-text">Drakiel</span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <ul class="nav-links">
+        <li><a href="index.html">Studio</a></li>
+        <li><a href="sesja.html" style="color: var(--accent-red);">Sesja</a></li>
+        <li><a href="mix.html">Mix & Mastering</a></li>
+        <li><a href="bup.html">Portfolio</a></li>
+      </ul>
     </div>
-  </div>
+  </header>
 
-  <!-- MENU OVERLAY (Mobilne) -->
-  <div id="mobile-nav-overlay" class="mobile-nav mobile-only">
-    <a href="index.html">Studio</a>
-    <a href="mix.html">Mix&Mastering</a>
-    <a href="sesja.html">Sesja</a>
-    <a href="bup.html">Portfolio</a>
-  </div>
-
-  <!-- NAV (Desktop - Glassmorphism) -->
-  <nav>
-    <a href="index.html" class="nav-left">
-      <img src="drakiel_logo.png" alt="Drakiel Logo">
-      <span>DDrakiel</span>
+  <!-- Apple-Style Floating Mobile Dock (Pojawia się po przewinięciu) -->
+  <nav class="apple-floating-dock" id="floating-dock">
+    <a href="index.html" class="dock-item">
+      <img src="drakiel_logo.png" alt="Studio Logo" class="dock-logo-img">
+      <span>Studio</span>
     </a>
-    <ul class="nav-links">
-      <li class="dropdown">
-        <a href="index.html">Studio</a>
-        <div class="dropdown-content">
-          <a href="index.html#wybor">Nasze Usługi</a>
-          <a href="index.html#zasady">Zasady Sesji</a>
-          <a href="index.html#proces">Jak wygląda proces</a>
-          <a href="index.html#sprzet">Zaplecze Sprzętowe</a>
-        </div>
-      </li>
-      <li><a href="mix.html" style="color: var(--accent-color);">Mix&Mastering</a></li>
-      <li><a href="sesja.html">Sesja</a></li>
-      <li><a href="bup.html">Portfolio</a></li>
-    </ul>
+    <a href="sesja.html" class="dock-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+      <span>Sesja</span>
+    </a>
+    <a href="mix.html" class="dock-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/></svg>
+      <span>Mix</span>
+    </a>
+    <a href="bup.html" class="dock-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 7.07 2.93"/><path d="M4.93 19.07A10 10 0 0 1 12 22"/></svg>
+      <span>Produkty</span>
+    </a>
+    <a href="#kontakt-footer" class="dock-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <span>Kontakt</span>
+    </a>
   </nav>
 
+  <div class="container">
+    <div class="page-header">
+      <h1 class="brand-text">Wybierz <span class="brand-span">Pakiet Sesji</span></h1>
+      <p>Wybierz opcję dopasowaną do Twoich potrzeb, aby przejść do finalizacji rezerwacji.</p>
+    </div>
+  </div>
+
   <div class="slider-viewport">
-
-      <div class="cennik-container" id="slider-track">
-        <div class="cennik" onclick="location.href='final-page.html?pakiet=Sesja%20Start%20/%20Demo'">
+    <div class="cennik-container" id="slider-track">
+      
+      <!-- Pakiet 1 -->
+      <div class="cennik" onclick="location.href='final-page.html?pakiet=Sesja%20Start%20/%20Demo'">
+        <div>
           <p>Sesja <br>Start / Demo</p>
-          <p1> Idealne dla początkujących lub nagrań demo.</p1>
-            <ul>
-              <li>Rejestracja wokalu</li>
-              <br>
-              <li>Maksymalnie 2 ścieżki</li>
-              <br>
-              <li>Do 2 poprawek w Projekcie</li>
-              <br>
-              <li>Wydanie pliku MP3 + WAV</li>
-              <br>
-              <li>Mikrofon: Novox NT1</li>
-            </ul>
-          <div class="cennik-price">
-            <p3>Wybierz</p3>
-            <br>
-            od 35zł/h
-          </div>
+          <p1>Idealne dla początkujących lub nagrań demo.</p1>
+          <ul>
+            <li>Rejestracja wokalu</li>
+            <li>Maksymalnie 2 ścieżki</li>
+            <li>Do 2 poprawek w Projekcie</li>
+            <li>Wydanie pliku MP3 + WAV</li>
+            <li>Mikrofon: Novox NT1</li>
+          </ul>
         </div>
-
-        <div class="cennik" id="most" onclick="location.href='final-page.html?pakiet=Sesja%20Standard'">
-          <p>Sesja Standard</p>
-          <p1> Świetna opcja dla osób, które chcą wrzucić kawałek na Spotify, Youtube itd.</p1>
-            <ul>
-              <li>Rejestracja wokalu</li>
-              <br>
-              <li>Maksymalnie 5 ścieżek + podpowiedzi od realizatora</li>
-              <br>
-              <li>Do 5 poprawek w Projekcie</li>
-              <br>
-              <li>Odsłuch na różnych sprzętach (monitory, słuchawki, telefon)</li>
-              <br>
-              <li>Mikrofon: Novox NT1</li>
-            </ul>
-          <div class="cennik-price">
-            <p3>Wybierz</p3>
-            <p2>Najczęściej wybierane</p2>
-            <br>
-            od 45zł/h
-          </div>
-        </div>
-
-        <div class="cennik" id="premium" onclick="location.href='final-page.html?pakiet=Sesja%20Premium'">
-            <p class="gradient-text">Sesja <br>Premium</p>
-            <p1 class="gradient-text"> Najlepszy wybór dla osób wymagających profesjonalnego brzmienia</p1>
-            <ul class="gradient-text">
-              <li class="gradient-text">Pełna edycja wokalu (dźwięk po dźwięku)</li>
-              <br>
-              <li class="gradient-text">Nielimitowana ilość poprawek</li>
-              <br>
-              <li class="gradient-text">Priorytetowa kolejność realizacji</li>
-              <br>
-              <li class="gradient-text">Priorytetowa kolejność realizacji</li>
-              <br>
-              <li>Mikrofon: Rode-NT1 + Interface</li>
-            </ul>
-            <div class="cennik-price">
-              <p3 class="gradient-text">Wybierz</p3>
-              <br>
-              <div class="gradient-text">od 60zł/h</div>
-            </div>
+        <div class="cennik-price">
+          <p3>Wybierz</p3>
+          <span>od 35zł/h</span>
         </div>
       </div>
-      <div class="slider-controls">
-        <button class="slider-arrow prev" id="prevBtn">&#10094;</button>
-        
-        <div class="slider-dots">
-            <div class="dot active"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+
+      <!-- Pakiet 2 -->
+      <div class="cennik" id="most" onclick="location.href='final-page.html?pakiet=Sesja%20Standard'">
+        <div>
+          <p>Sesja Standard</p>
+          <p1>Świetna opcja dla osób, które chcą wrzucić kawałek na Spotify, Youtube itd.</p1>
+          <ul>
+            <li>Rejestracja wokalu</li>
+            <li>Maksymalnie 5 ścieżek + podpowiedzi od realizatora</li>
+            <li>Do 5 poprawek w Projekcie</li>
+            <li>Odsłuch na różnych sprzętach (monitory, słuchawki, telefon)</li>
+            <li>Mikrofon: Novox NT1</li>
+          </ul>
+        </div>
+        <div class="cennik-price">
+          <p3>Wybierz</p3>
+          <p2>Najczęściej wybierane</p2>
+          <span>od 45zł/h</span>
+        </div>
+      </div>
+
+      <!-- Pakiet 3 -->
+      <div class="cennik" id="premium" onclick="location.href='final-page.html?pakiet=Sesja%20Premium'">
+        <div>
+          <p>Sesja <br>Premium</p>
+          <p1>Najlepszy wybór dla osób wymagających profesjonalnego brzmienia</p1>
+          <ul>
+            <li>Pełna edycja wokalu (dźwięk po dźwięku)</li>
+            <li>Nielimitowana ilość poprawek</li>
+            <li>Priorytetowa kolejność realizacji</li>
+            <li>Zaawansowany processing brzmienia</li>
+            <li>Mikrofon: Rode-NT1 + Interface</li>
+          </ul>
+        </div>
+        <div class="cennik-price">
+          <p3>Wybierz</p3>
+          <span>od 60zł/h</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Kontrolery slidera (widoczne tylko mobilnie) -->
+    <div class="slider-controls">
+      <button class="slider-arrow" id="prevBtn">&#10094;</button>
+      <div class="slider-dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <button class="slider-arrow" id="nextBtn">&#10095;</button>
+    </div>
+  </div>
+
+  <footer id="kontakt-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Brand Col -->
+        <div class="footer-brand">
+          <a href="#" class="brand-logo">
+            <img src="drakiel_logo.png" alt="DDrakiel Studio Logo" class="brand-logo-img" onerror="this.onerror=null; this.src='https://placehold.co/100x100/ca0c2c/ffffff?text=D';">
+            <span class="brand-text">Drakiel</span>
+          </a>
+          <p>Nowoczesna przestrzeń nagraniowa stworzona dla artystów ceniących czystość dźwięku i niezawodny proces twórczy.</p>
         </div>
 
-        <button class="slider-arrow next" id="nextBtn">&#10095;</button>
+        <!-- Nav Col -->
+        <div class="footer-col">
+          <h5>Nawigacja</h5>
+          <ul>
+            <li><a href="index.html">Strona Główna</a></li>
+            <li><a href="sesja.html">Sesja Nagraniowa</a></li>
+            <li><a href="mix.html">Mix & Mastering</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Col -->
+        <div class="footer-col">
+          <h5>Lokalizacja & Kontakt</h5>
+          <p style="margin-bottom: 8px;">Ulica Bursztynowa XX, Warszawa</p>
+          <p style="margin-bottom: 8px;">Telefon: <a href="tel:+48123456789" style="color: var(--text-main); font-weight: 600;">+48 123 456 789</a></p>
+          <p>Email: <a href="mailto:kontakt@drakielstudio.pl">kontakt@drakielstudio.pl</a></p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>Copyright © 2026 Drakiel. Wszystkie prawa zastrzeżone.</p>
+        <p>Designed with precision by INDRAS STUDIO®</p>
+      </div>
     </div>
-  <div class="fooder">
-  <div class="fooder-side left">
-    <img src="drakiel_logo.png" alt="Drakiel Logo Lewa" />
-  </div>
+  </footer>
 
-  
-  <div class="fooder-text">
-    Drakiel to innowcja pozdro <br>
-    <p1>Created and designed by INDRAS STUDIO® for a special order by Drakiel®</p1>
-  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const track = document.getElementById('slider-track');
+        const dots = document.querySelectorAll('.dot');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
 
-  <div class="fooder-side right">
-     <img src="indras_logo.png" alt="Indras logo">
-  </div>
-  <script src="drakiel_studio.js"></script>
-</body>
-<script>
+        function updateDots() {
+            const scrollLeft = track.scrollLeft;
+            const itemWidth = track.querySelector('.cennik').clientWidth + 30;
+            const index = Math.round(scrollLeft / itemWidth);
 
-document.addEventListener('DOMContentLoaded', function() {
-    const track = document.getElementById('slider-track');
-    const dots = document.querySelectorAll('.dot');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
 
-    // Funkcja aktualizująca kropki
-    function updateDots() {
-        const scrollLeft = track.scrollLeft;
-        const itemWidth = track.querySelector('.cennik').clientWidth + 20;
-        const index = Math.round(scrollLeft / itemWidth);
+        if(nextBtn && prevBtn) {
+          nextBtn.addEventListener('click', () => {
+              track.scrollBy({ left: track.clientWidth * 0.8, behavior: 'smooth' });
+          });
 
-        dots.forEach((dot, i) => {
-            dot.classList.toggle('active', i === index);
+          prevBtn.addEventListener('click', () => {
+              track.scrollBy({ left: -track.clientWidth * 0.8, behavior: 'smooth' });
+          });
+
+          track.addEventListener('scroll', updateDots);
+        }
+
+        // Skrypt obsługujący chowanie headera i wysuwanie paska Apple po przewinięciu w dół
+        const mainHeader = document.getElementById('main-header');
+        const floatingDock = document.getElementById('floating-dock');
+
+        window.addEventListener('scroll', () => {
+          const currentScrollY = window.pageYOffset;
+          if (currentScrollY <= 50) {
+            mainHeader.classList.remove('mobile-hidden');
+            floatingDock.classList.remove('dock-visible');
+          } else {
+            mainHeader.classList.add('mobile-hidden');
+            floatingDock.classList.add('dock-visible');
+          }
         });
-    }
-
-    // Przewijanie strzałkami
-    nextBtn.addEventListener('click', () => {
-        track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
     });
-
-    prevBtn.addEventListener('click', () => {
-        track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' });
-    });
-
-    // Nasłuchiwanie scrolla
-    track.addEventListener('scroll', updateDots);
-});
-</script>
+  </script>
+</body>
 </html>
