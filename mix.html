@@ -185,10 +185,10 @@
       -webkit-backdrop-filter: saturate(180%) blur(20px);
       border: 1px solid rgb(31, 31, 31);
       border-radius: 32px;
-      padding: 8px 16px;
+      padding: 8px 18px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
       z-index: 1005;
-      gap: 12px;
+      gap: 16px;
       align-items: center;
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
       opacity: 0;
@@ -200,8 +200,8 @@
       flex-direction: column;
       align-items: center;
       text-decoration: none;
-      color: var(--text-muted);
-      font-size: 0.6rem;
+      color: var(--text-main);
+      font-size: 0.65rem;
       font-weight: 500;
       gap: 3px;
       transition: transform 0.2s ease, color 0.2s ease;
@@ -209,15 +209,11 @@
     }
 
     .dock-item svg, .dock-logo-img {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       stroke: var(--text-main);
       object-fit: contain;
       transition: transform 0.2s ease, stroke 0.2s ease;
-    }
-
-    .dock-item:hover, .dock-item.active {
-      color: var(--accent-red);
     }
 
     .dock-item:hover svg, .dock-item.active svg,
@@ -738,7 +734,7 @@
   <!-- HEADER -->
   <header class="main-header" id="main-header">
     <div class="container nav-wrapper">
-      <a href="ddrakiel_studio_landing_page_3.html" class="brand-logo">
+      <a href="index.html" class="brand-logo">
         <img src="drakiel_logo.png" alt="DDrakiel Studio Logo" class="brand-logo-img" onerror="this.onerror=null; this.src='https://placehold.co/100x100/ca0c2c/ffffff?text=D';">
         <span class="brand-text">Drakiel</span>
       </a>
