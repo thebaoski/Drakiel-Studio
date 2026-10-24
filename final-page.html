@@ -1068,7 +1068,6 @@
       "Sesja Premium": 60
     };
 
-    // Poczatek kalendarza ustawiony od aktualnego dnia
     const realToday = new Date();
     realToday.setHours(0,0,0,0);
 
@@ -1092,7 +1091,6 @@
       renderHours();
       updateSummary();
 
-      // Skrypt obsługujący chowanie headera oraz wysuwanie paska Apple TYLKO na urządzeniach mobilnych
       const mainHeader = document.getElementById('main-header');
       const floatingDock = document.getElementById('floating-dock');
 
@@ -1126,7 +1124,6 @@
       document.getElementById('guests-count-group').style.display = hasGuests ? 'block' : 'none';
     }
 
-    // Pomocnicza funkcja do formatowania daty w formacie: Dzień.Miesiąc.Rok (np. 14.10.2026)
     function formatPolishDate(dateStr) {
       if (!dateStr) return '';
       const parts = dateStr.split('-');
@@ -1136,7 +1133,6 @@
       return dateStr;
     }
 
-    // Algorytm obliczania daty Wielkanocy dla danego roku
     function getEasterDate(year) {
       const a = year % 19;
       const b = Math.floor(year / 100);
@@ -1155,13 +1151,11 @@
       return new Date(year, month - 1, day);
     }
 
-    // Sprawdzanie czy data jest polskim świętem
     function isPolishHoliday(date) {
       const year = date.getFullYear();
       const month = date.getMonth();
       const day = date.getDate();
 
-      // Święta stałe (miesiące 0-indexed)
       const fixedHolidays = [
         "0-1",   // Nowy Rok (1 stycznia)
         "0-6",   // Trzech Króli (6 stycznia)
@@ -1176,14 +1170,10 @@
 
       if (fixedHolidays.includes(`${month}-${day}`)) return true;
 
-      // Święta ruchome zależne od Wielkanocy
       const easter = getEasterDate(year);
-      
-      // Poniedziałek Wielkanocny (Wielkanoc + 1 dzień)
       const easterMonday = new Date(easter);
       easterMonday.setDate(easter.getDate() + 1);
 
-      // Boże Ciało (Wielkanoc + 60 dni)
       const corpusChristi = new Date(easter);
       corpusChristi.setDate(easter.getDate() + 60);
 
@@ -1193,6 +1183,34 @@
       if (checkStr === `${corpusChristi.getFullYear()}-${corpusChristi.getMonth()}-${corpusChristi.getDate()}`) return true;
 
       return false;
+    }
+
+    // Pomocnicza funkcja do sprawdzania czy konkretna godzina w wybranym dniu jest zablokowana
+    function isHourBlockedForDate(h, dateStr) {
+      if (!dateStr || typeof zablokowaneGodziny === 'undefined') return false;
+      const hourStr = `${String(h).padStart(2, '0')}:00`;
+      if (Array.isArray(zablokowaneGodziny)) {
+        const match = zablokowaneGodziny.find(item => item.data === dateStr);
+        if (match && match.godziny && match.godziny.includes(hourStr)) {
+          return true;
+        }
+      } else if (typeof zablokowaneGodziny === 'object' && zablokowaneGodziny && zablokowaneGodziny[dateStr]) {
+        if (zablokowaneGodziny[dateStr].includes(hourStr)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // Funkcja sprawdzająca czy WSZYSTKIE godziny (11:00 - 22:00) w danym dniu są zajęte/zablokowane
+    function isDayFullyBooked(dateStr) {
+      if (typeof zablokowaneGodziny === 'undefined') return false;
+      for (let h = 11; h <= 22; h++) {
+        if (!isHourBlockedForDate(h, dateStr)) {
+          return false; // Znaleziono przynajmniej jedną wolną godzinę
+        }
+      }
+      return true; // Wszystkie godziny są zajęte
     }
 
     // KALENDARZ
@@ -1206,7 +1224,6 @@
       const monthNames = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
       document.getElementById('calendar-month-year').textContent = `${monthNames[month]} ${year}`;
 
-      // Obsługa blokowania przycisków nawigacji (maksymalnie 3 miesiące do przodu od obecnego miesiąca)
       const monthsDiff = (year - baseMonthDate.getFullYear()) * 12 + (month - baseMonthDate.getMonth());
       
       const prevBtn = document.getElementById('cal-prev-btn');
@@ -1237,7 +1254,6 @@
           dayDiv.classList.add('weekend');
         }
 
-        // Czerwona cyfra dla niedziel i świąt
         if (isSunday || isHoliday) {
           dayDiv.classList.add('red-date');
         }
@@ -1246,7 +1262,6 @@
         
         let isDisabled = thisDate < realToday;
 
-        // Blokowanie dni przekraczających dokładnie 3 miesiące
         const maxAllowedDate = new Date(realToday);
         maxAllowedDate.setMonth(realToday.getMonth() + 3);
         if (thisDate > maxAllowedDate) {
@@ -1257,15 +1272,19 @@
           isDisabled = true;
         }
 
+        // Automatyczne blokowanie dnia, jeśli wszystkie godziny są zarezerwowane/zablokowane
+        if (!isDisabled && isDayFullyBooked(dateString)) {
+          isDisabled = true;
+        }
+
         if (isDisabled) {
           dayDiv.classList.add('disabled');
         } else {
-          // Numer dnia na środku
           const dayNumSpan = document.createElement('span');
           dayNumSpan.className = 'day-num';
           dayNumSpan.textContent = day;
           if (isWeekend) {
-            dayNumSpan.style.transform = 'translateY(-4px)'; // Uniesienie numeru lekko w górę, aby zmieścił się napis +20zł/h
+            dayNumSpan.style.transform = 'translateY(-4px)';
           }
           dayDiv.appendChild(dayNumSpan);
 
@@ -1285,7 +1304,6 @@
       const tempDate = new Date(targetYear, targetMonth, 1);
       const monthsDiff = (tempDate.getFullYear() - baseMonthDate.getFullYear()) * 12 + (tempDate.getMonth() - baseMonthDate.getMonth());
 
-      // Pozwól tylko na zakres od 0 do 3 miesięcy w przód
       if (monthsDiff >= 0 && monthsDiff <= 3) {
         currentDate.setMonth(targetMonth);
         renderCalendar();
@@ -1305,24 +1323,10 @@
       checkMobileProgression(document.getElementById('selected-date'), 'sec-hours');
     }
 
-    // Pomocnicza funkcja sprawdzająca czy konkretna godzina jest zablokowana
     function isHourBlocked(h) {
-      if (!selectedDateStr || typeof zablokowaneGodziny === 'undefined') return false;
-      const hourStr = `${String(h).padStart(2, '0')}:00`;
-      if (Array.isArray(zablokowaneGodziny)) {
-        const match = zablokowaneGodziny.find(item => item.data === selectedDateStr);
-        if (match && match.godziny && match.godziny.includes(hourStr)) {
-          return true;
-        }
-      } else if (typeof zablokowaneGodziny === 'object' && zablokowaneGodziny[selectedDateStr]) {
-        if (zablokowaneGodziny[selectedDateStr].includes(hourStr)) {
-          return true;
-        }
-      }
-      return false;
+      return isHourBlockedForDate(h, selectedDateStr);
     }
 
-    // GODZINY (11:00 do 22:00) z blokowaniem przejścia przez zablokowane godziny
     function renderHours() {
       const container = document.getElementById('hours-grid-container');
       container.innerHTML = '';
@@ -1345,7 +1349,6 @@
 
         let isHourDisabled = isHourBlocked(h);
 
-        // Jeśli wybrano godzinę startową, zablokuj wszystkie kolejne godziny po napotkaniu jakiejkolwiek zablokowanej godziny
         if (!isHourDisabled && selectedStartHour !== null && h > selectedStartHour) {
           for (let x = selectedStartHour + 1; x <= h; x++) {
             if (isHourBlocked(x)) {
@@ -1375,7 +1378,6 @@
         selectedEndHour = null;
       } else if (selectedStartHour !== null && selectedEndHour === null) {
         if (h > selectedStartHour) {
-          // Upewnij się, że zakres nie przechodzi przez zablokowane godziny
           let hasBlockedBetween = false;
           for (let x = selectedStartHour + 1; x <= h; x++) {
             if (isHourBlocked(x)) {
@@ -1425,7 +1427,6 @@
       }
     }
 
-    // KALKULACJA CENY I PODSUMOWANIE
     function updateSummary() {
       const nameVal = document.getElementById('client-name').value.trim();
       const emailVal = document.getElementById('client-email').value.trim();
@@ -1555,7 +1556,6 @@
       document.getElementById('confirmation-modal').classList.remove('active');
     }
 
-    // WYSYŁKA DO TWOJEGO BACKENDU NODE.JS
     async function executeFinalSubmit() {
       closeConfirmationModal();
 
@@ -1576,7 +1576,6 @@
       showToast("Wysyłanie rezerwacji...");
 
       try {
-        // Zapytanie wysyłane do Twojego działającego serwera Node.js
         const response = await fetch('http://localhost:5000/api/send-booking', {
           method: 'POST',
           headers: {
