@@ -370,9 +370,14 @@
       transition: background 0.2s;
     }
 
-    .calendar-nav-btn:hover {
+    .calendar-nav-btn:hover:not(:disabled) {
       background: var(--accent-red);
       border-color: var(--accent-red);
+    }
+
+    .calendar-nav-btn:disabled {
+      opacity: 0.2;
+      cursor: not-allowed;
     }
 
     .calendar-weekdays {
@@ -408,6 +413,15 @@
       padding: 2px;
     }
 
+    .cal-day .day-num {
+      transition: color 0.2s;
+    }
+
+    /* Kolor czerwony dla niedziel i świąt (tylko sama cyfra) */
+    .cal-day.red-date .day-num {
+      color: var(--accent-red);
+    }
+
     .cal-day:hover:not(.disabled) {
       border-color: var(--accent-red);
       background: rgba(202, 12, 44, 0.1);
@@ -416,7 +430,11 @@
     .cal-day.selected {
       background: var(--accent-red) !important;
       border-color: var(--accent-red) !important;
-      color: #fff;
+      color: #fff !important;
+    }
+
+    .cal-day.selected .day-num {
+      color: #fff !important;
     }
 
     .cal-day.disabled {
@@ -895,9 +913,9 @@
 
             <div class="calendar-container">
               <div class="calendar-header">
-                <button type="button" class="calendar-nav-btn" onclick="changeMonth(-1)">❮</button>
+                <button type="button" class="calendar-nav-btn" id="cal-prev-btn" onclick="changeMonth(-1)">❮</button>
                 <span id="calendar-month-year">Październik 2026</span>
-                <button type="button" class="calendar-nav-btn" onclick="changeMonth(1)">❯</button>
+                <button type="button" class="calendar-nav-btn" id="cal-next-btn" onclick="changeMonth(1)">❯</button>
               </div>
               <div class="calendar-weekdays">
                 <div>Pn</div><div>Wt</div><div>Śr</div><div>Cz</div><div>Pt</div><div>So</div><div>Nd</div>
@@ -927,7 +945,7 @@
             </div>
 
             <div class="form-group" style="margin-bottom: 0;">
-              <label for="client-notes">Wytyczne i uwagi</label>
+              <label for="client-notes">Wytyczne i uwagi (zabezpieczone)</label>
               <textarea id="client-notes" rows="3" placeholder="Dodatkowe informacje..." oninput="sanitizeInput(this)"></textarea>
             </div>
 
@@ -1050,7 +1068,13 @@
       "Sesja Premium": 60
     };
 
-    let currentDate = new Date(2026, 9, 1); // Październik 2026
+    // Poczatek kalendarza ustawiony od aktualnego dnia
+    const realToday = new Date();
+    realToday.setHours(0,0,0,0);
+
+    let currentDate = new Date(realToday.getFullYear(), realToday.getMonth(), 1);
+    const baseMonthDate = new Date(realToday.getFullYear(), realToday.getMonth(), 1);
+
     let selectedDateStr = "";
     let selectedStartHour = null;
     let selectedEndHour = null;
@@ -1112,6 +1136,65 @@
       return dateStr;
     }
 
+    // Algorytm obliczania daty Wielkanocy dla danego roku
+    function getEasterDate(year) {
+      const a = year % 19;
+      const b = Math.floor(year / 100);
+      const c = year % 100;
+      const d = Math.floor(b / 4);
+      const e = b % 4;
+      const f = Math.floor((b + 8) / 25);
+      const g = Math.floor((b - f + 1) / 3);
+      const h = (19 * a + b - d - g + 15) % 30;
+      const i = Math.floor(c / 4);
+      const k = c % 4;
+      const l = (32 + 2 * e + 2 * i - h - k) % 7;
+      const m = Math.floor((a + 11 * h + 22 * l) / 451);
+      const month = Math.floor((h + l - 7 * m + 114) / 31);
+      const day = ((h + l - 7 * m + 114) % 31) + 1;
+      return new Date(year, month - 1, day);
+    }
+
+    // Sprawdzanie czy data jest polskim świętem
+    function isPolishHoliday(date) {
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const day = date.getDate();
+
+      // Święta stałe (miesiące 0-indexed)
+      const fixedHolidays = [
+        "0-1",   // Nowy Rok (1 stycznia)
+        "0-6",   // Trzech Króli (6 stycznia)
+        "4-1",   // Święto Pracy (1 maja)
+        "4-3",   // Święto Konstytucji 3 Maja (3 maja)
+        "7-15",  // Wniebowzięcie NMP (15 sierpnia)
+        "10-1",  // Wszystkich Świętych (1 listopada)
+        "10-11", // Święto Niepodległości (11 listopada)
+        "11-25", // Boże Narodzenie (25 grudnia)
+        "11-26"  // Drugi Dzień Bożego Narodzenia (26 grudnia)
+      ];
+
+      if (fixedHolidays.includes(`${month}-${day}`)) return true;
+
+      // Święta ruchome zależne od Wielkanocy
+      const easter = getEasterDate(year);
+      
+      // Poniedziałek Wielkanocny (Wielkanoc + 1 dzień)
+      const easterMonday = new Date(easter);
+      easterMonday.setDate(easter.getDate() + 1);
+
+      // Boże Ciało (Wielkanoc + 60 dni)
+      const corpusChristi = new Date(easter);
+      corpusChristi.setDate(easter.getDate() + 60);
+
+      const checkStr = `${year}-${month}-${day}`;
+      if (checkStr === `${easter.getFullYear()}-${easter.getMonth()}-${easter.getDate()}`) return true;
+      if (checkStr === `${easterMonday.getFullYear()}-${easterMonday.getMonth()}-${easterMonday.getDate()}`) return true;
+      if (checkStr === `${corpusChristi.getFullYear()}-${corpusChristi.getMonth()}-${corpusChristi.getDate()}`) return true;
+
+      return false;
+    }
+
     // KALENDARZ
     function renderCalendar() {
       const grid = document.getElementById('calendar-days-grid');
@@ -1123,6 +1206,15 @@
       const monthNames = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
       document.getElementById('calendar-month-year').textContent = `${monthNames[month]} ${year}`;
 
+      // Obsługa blokowania przycisków nawigacji (maksymalnie 3 miesiące do przodu od obecnego miesiąca)
+      const monthsDiff = (year - baseMonthDate.getFullYear()) * 12 + (month - baseMonthDate.getMonth());
+      
+      const prevBtn = document.getElementById('cal-prev-btn');
+      const nextBtn = document.getElementById('cal-next-btn');
+      
+      if (prevBtn) prevBtn.disabled = (monthsDiff <= 0);
+      if (nextBtn) nextBtn.disabled = (monthsDiff >= 3);
+
       const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7;
       const totalDays = new Date(year, month + 1, 0).getDate();
 
@@ -1131,24 +1223,36 @@
         grid.appendChild(emptyDiv);
       }
 
-      const today = new Date();
-      today.setHours(0,0,0,0);
-
       for (let day = 1; day <= totalDays; day++) {
         const dayDiv = document.createElement('div');
         dayDiv.className = 'cal-day';
         
         const thisDate = new Date(year, month, day);
         const dayOfWeek = thisDate.getDay();
+        const isSunday = (dayOfWeek === 0);
         const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+        const isHoliday = isPolishHoliday(thisDate);
         
         if (isWeekend) {
           dayDiv.classList.add('weekend');
         }
 
+        // Czerwona cyfra dla niedziel i świąt
+        if (isSunday || isHoliday) {
+          dayDiv.classList.add('red-date');
+        }
+
         const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         
-        let isDisabled = thisDate < today;
+        let isDisabled = thisDate < realToday;
+
+        // Blokowanie dni przekraczających dokładnie 3 miesiące
+        const maxAllowedDate = new Date(realToday);
+        maxAllowedDate.setMonth(realToday.getMonth() + 3);
+        if (thisDate > maxAllowedDate) {
+          isDisabled = true;
+        }
+
         if (typeof zablokowaneDaty !== 'undefined' && Array.isArray(zablokowaneDaty) && zablokowaneDaty.includes(dateString)) {
           isDisabled = true;
         }
@@ -1158,6 +1262,7 @@
         } else {
           // Numer dnia na środku
           const dayNumSpan = document.createElement('span');
+          dayNumSpan.className = 'day-num';
           dayNumSpan.textContent = day;
           if (isWeekend) {
             dayNumSpan.style.transform = 'translateY(-4px)'; // Uniesienie numeru lekko w górę, aby zmieścił się napis +20zł/h
@@ -1174,8 +1279,17 @@
     }
 
     function changeMonth(direction) {
-      currentDate.setMonth(currentDate.getMonth() + direction);
-      renderCalendar();
+      const targetMonth = currentDate.getMonth() + direction;
+      const targetYear = currentDate.getFullYear();
+
+      const tempDate = new Date(targetYear, targetMonth, 1);
+      const monthsDiff = (tempDate.getFullYear() - baseMonthDate.getFullYear()) * 12 + (tempDate.getMonth() - baseMonthDate.getMonth());
+
+      // Pozwól tylko na zakres od 0 do 3 miesięcy w przód
+      if (monthsDiff >= 0 && monthsDiff <= 3) {
+        currentDate.setMonth(targetMonth);
+        renderCalendar();
+      }
     }
 
     function selectDate(dateStr, element) {
