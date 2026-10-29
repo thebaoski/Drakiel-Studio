@@ -173,13 +173,29 @@
       color: var(--accent-red);
     }
 
-    /* Apple-Style Floating Mobile Dock */
-    .apple-floating-dock {
+    /* KONTENER DLA MOBILNEGO DOCKU I PASKU CENY */
+    .mobile-dock-container {
       display: none;
       position: fixed;
-      bottom: 24px;
+      bottom: 0px;
       left: 50%;
       transform: translateX(-50%) translateY(100px);
+      z-index: 1005;
+      align-items: center;
+      gap: 0px;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .mobile-dock-container.dock-visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Apple-Style Floating Mobile Dock - Domyślnie idealnie wyśrodkowany */
+    .apple-floating-dock {
       background: var(--glass-bg);
       backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -187,12 +203,28 @@
       border-radius: 32px;
       padding: 8px 18px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-      z-index: 1005;
+      display: flex;
       gap: 16px;
       align-items: center;
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      z-index: 1005;
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
       opacity: 0;
       pointer-events: none;
+    }
+
+    .mobile-dock-container.dock-visible .apple-floating-dock {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Gdy pojawia się kwota, pasek Apple płynnie przesuwa się w lewo */
+    .mobile-dock-container.has-price .apple-floating-dock {
+      transform: translateX(calc(-50% - 45px)) translateY(0);
     }
 
     .dock-item {
@@ -222,6 +254,41 @@
       transform: scale(1.15);
     }
 
+    /* Pasek z kwotą wysuwający się obok paska Apple */
+    .mobile-price-badge {
+      background: var(--glass-bg);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border: 1px solid rgb(31, 31, 31);
+      border-radius: 32px;
+      padding: 22px 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: right;
+      justify-content: center;
+      position: fixed;
+      bottom: 24px;
+      left: calc(50% + 115px);
+      transform: translateX(100px) scale(0.8);
+      z-index: 1004;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+    }
+
+    .mobile-dock-container.dock-visible.has-price .mobile-price-badge {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .mobile-price-badge .value {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
     @media (max-width: 768px) {
       header.main-header {
         background: linear-gradient(180deg, rgba(13, 13, 13, 0.95) 0%, rgba(13, 13, 13, 0) 100%);
@@ -247,14 +314,8 @@
         display: none !important;
       }
 
-      .apple-floating-dock {
+      .mobile-dock-container {
         display: flex;
-      }
-
-      .apple-floating-dock.dock-visible {
-        transform: translateX(-50%) translateY(0);
-        opacity: 1;
-        pointer-events: auto;
       }
     }
 
@@ -749,29 +810,36 @@
     </div>
   </header>
 
-  <!-- Apple-Style Floating Mobile Dock -->
-  <nav class="apple-floating-dock" id="floating-dock">
-    <a href="index.html" class="dock-item">
-      <img src="drakiel_logo.png" alt="Studio Logo" class="dock-logo-img" onerror="this.onerror=null; this.src='https://placehold.co/100x100/ffffff/000000?text=D';">
-      <span>Studio</span>
-    </a>
-    <a href="sesja.html" class="dock-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
-      <span>Sesja</span>
-    </a>
-    <a href="mix.html" class="dock-item active">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/></svg>
-      <span>Mix</span>
-    </a>
-    <a href="Products.html" class="dock-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 7.07 2.93"/><path d="M4.93 19.07A10 10 0 0 1 12 22"/></svg>
-      <span>Produkty</span>
-    </a>
-    <a href="#kontakt-footer" class="dock-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-      <span>Kontakt</span>
-    </a>
-  </nav>
+  <!-- KONTENER PŁYWAJĄCY NA WERSJI MOBILNEJ (Apple Dock + Pasek Kwoty "od xxx zł") -->
+  <div class="mobile-dock-container" id="mobile-dock-container">
+    <nav class="apple-floating-dock" id="floating-dock">
+      <a href="index.html" class="dock-item">
+        <img src="drakiel_logo.png" alt="Studio Logo" class="dock-logo-img" onerror="this.onerror=null; this.src='https://placehold.co/100x100/ffffff/000000?text=D';">
+        <span>Studio</span>
+      </a>
+      <a href="sesja.html" class="dock-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        <span>Sesja</span>
+      </a>
+      <a href="mix.html" class="dock-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/></svg>
+        <span>Mix</span>
+      </a>
+      <a href="Products.html" class="dock-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 7.07 2.93"/><path d="M4.93 19.07A10 10 0 0 1 12 22"/></svg>
+        <span>Produkty</span>
+      </a>
+      <a href="#kontakt-footer" class="dock-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span>Kontakt</span>
+      </a>
+    </nav>
+
+    <!-- Pasek z kwotą w stylu referencji -->
+    <div class="mobile-price-badge" id="mobile-price-badge">
+      <span class="value" id="mobile-total-price">150 zł</span>
+    </div>
+  </div>
 
   <div class="container">
     <div class="page-header">
@@ -919,7 +987,7 @@
           </div>
 
           <!-- PODSUMOWANIE (BOCZNY PANEL) -->
-          <div class="summary-card">
+          <div class="summary-card" id="summary-card-section">
             <h3 class="summary-title">Podsumowanie</h3>
             
             <div class="summary-item">
@@ -1033,6 +1101,16 @@
   <script>
     const BASE_PRICE = 150;
 
+    function hasUserSelectedCatalogOption() {
+      const place = document.getElementById('recording-place').value;
+      const quality = document.getElementById('track-quality').value;
+      const duration = document.getElementById('song-duration').value;
+      const tracks = document.getElementById('track-count').value;
+      const isExpress = document.getElementById('express-yes').checked;
+
+      return (place !== "" || quality !== "" || duration !== "" || tracks !== "" || isExpress);
+    }
+
     function calculatePrice() {
       let currentPrice = BASE_PRICE;
 
@@ -1064,6 +1142,14 @@
       if (place === 'Studio Drakiel') {
         currentPrice = currentPrice * 0.9;
         hasDiscount = true;
+      }
+
+      const finalFormattedPrice = Math.round(currentPrice) + ' zł';
+
+      document.getElementById('total-price').textContent = finalFormattedPrice;
+      const mobileTotalPriceEl = document.getElementById('mobile-total-price');
+      if (mobileTotalPriceEl) {
+        mobileTotalPriceEl.textContent = finalFormattedPrice;
       }
 
       const nameSpan = document.getElementById('sum-name');
@@ -1112,7 +1198,7 @@
         discountBadge.style.display = 'none';
       }
 
-      document.getElementById('total-price').textContent = Math.round(currentPrice) + ' zł';
+      updateMobileDockState();
     }
 
     function handleRecordingPlaceChange() {
@@ -1145,18 +1231,57 @@
                                      .replace(/on\w+="[^"]*"/g, "");
     }
 
+    function updateMobileDockState() {
+      const mobileDockContainer = document.getElementById('mobile-dock-container');
+      const mainHeader = document.getElementById('main-header');
+      const summaryCard = document.getElementById('summary-card-section');
+
+      if (window.innerWidth <= 768) {
+        let reachedSummary = false;
+        if (summaryCard) {
+          const summaryRect = summaryCard.getBoundingClientRect();
+          if (summaryRect.top <= window.innerHeight * 0.75) {
+            reachedSummary = true;
+          }
+        }
+
+        const isHeaderVisible = !mainHeader.classList.contains('mobile-hidden');
+
+        if (isHeaderVisible || reachedSummary) {
+          mobileDockContainer.classList.remove('dock-visible');
+        } else {
+          mobileDockContainer.classList.add('dock-visible');
+
+          if (hasUserSelectedCatalogOption() && !reachedSummary) {
+            mobileDockContainer.classList.add('has-price');
+          } else {
+            mobileDockContainer.classList.remove('has-price');
+          }
+        }
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const mainHeader = document.getElementById('main-header');
-      const floatingDock = document.getElementById('floating-dock');
+      const summaryCard = document.getElementById('summary-card-section');
 
       window.addEventListener('scroll', () => {
         const currentScrollY = window.pageYOffset;
-        if (currentScrollY <= 100) {
-          mainHeader.classList.remove('mobile-hidden');
-          floatingDock.classList.remove('dock-visible');
+
+        if (window.innerWidth <= 768) {
+          if (currentScrollY <= 20) {
+            mainHeader.classList.remove('mobile-hidden');
+          } else {
+            mainHeader.classList.add('mobile-hidden');
+          }
+
+          updateMobileDockState();
         } else {
-          mainHeader.classList.add('mobile-hidden');
-          floatingDock.classList.add('dock-visible');
+          if (currentScrollY <= 100) {
+            mainHeader.classList.remove('mobile-hidden');
+          } else {
+            mainHeader.classList.add('mobile-hidden');
+          }
         }
       });
 
